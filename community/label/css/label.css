@@ -1,0 +1,11 @@
+#label-custom-component {
+  display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#legend .label-tooltip .state-icon {
+    margin-right: .5em;
+}
