@@ -1,8 +1,89 @@
 const fileimport = (function () {
+  const API_CSV = "https://api-adresse.data.gouv.fr/search/csv/";
   var _button;
   var _buttonActive = false;
   var _importLayer;
   var _srsHTML = ["<option value='EPSG:4326'>EPSG:4326</option>"];
+
+  /**
+   * Private method createDefaultOLayerOption
+   * Creates default layer options for imported layers
+   * @param {*} idLayer
+   * @param {*} title
+   * @param {*} params
+   * @returns
+   */
+  const createDefaultOLayerOption = (idLayer, title, params) => {
+    let id = idLayer || _.uniqidId("import_file_");
+    return {
+      projections: {
+        projection: [
+          {
+            proj4js:
+              "'EPSG:3857','+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs'",
+          },
+          {
+            proj4js:
+              "'EPSG:2154','+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'",
+          },
+        ],
+      },
+      type: "import",
+      id: id,
+      name: title,
+      visible: "true",
+      legendurl: "img/blank.gif",
+      urlparam: "file",
+      queryable: true,
+      vectorlegend: true,
+      expanded: true,
+      sld: null,
+      template: false,
+      icon: "fas fa-file",
+      layername: id,
+      theme: "csv",
+      rank: 1,
+      index: null,
+      title: title,
+      layerid: id,
+      infospanel: "right-panel",
+      style: "",
+      toplayer: false,
+      draggable: true,
+      opacity: 1,
+      maxzoom: null,
+      minzoom: null,
+      tooltip: false,
+      tooltipenabled: false,
+      tooltipcontent: "",
+      timefilter: false,
+      timecontrol: "calendar",
+      timeshowavailable: false,
+      timemin: 2020,
+      timemax: 2025,
+      attributefilter: false,
+      attributeoperator: "=",
+      wildcardpattern: "%value%",
+      attributestylesync: false,
+      attributefilterenabled: false,
+      customcontrol: false,
+      customcontrolpath: "customcontrols",
+      exclusive: false,
+      searchable: false,
+      checked: true,
+      visiblebydefault: true,
+      tiled: false,
+      dynamiclegend: false,
+      nohighlight: false,
+      infohighlight: true,
+      showintoc: true,
+      useproxy: false,
+      jsonfields: [],
+      secure: "public",
+      authentification: false,
+      ...params,
+    };
+  };
 
   /**
    * Private method _toggleImportLayer
@@ -165,17 +246,71 @@ const fileimport = (function () {
    * HTML content of drag and drop zone
    */
   var _template = function (oLayer) {
-    return `<div class="dropzone dz-clickable" id="drop_zone" onclick="$('#loadcsv-${oLayer.layerid}').click();" ondrop="fileimport.dropHandler(event);" ondragover="fileimport.dragOverHandler(event);">
-                  <div id="csv-status" class="start">
-                      <div class="dz-default dz-message"><i class="ri-upload-line"></i>
-                          <div i18n="fileimport.upload.dropzone">Glissez-déposez un fichier GeoJSON, CSV ou SHP (en ZIP) ici ou cliquez pour le sélectionner</div>
-                      </div>
-                      <div class="dz-work dz-message"><span class="fas fa-spin fa-cog fa-3x"></span>
-                          <p i18n="fileimport.upload.processing">Traitement en cours</p>
-                      </div>
-                  </div>
-              </div>
-              <input type="file" name="filebutton" onchange="fileimport.loadLocalFile('${oLayer.layerid}')" style="visibility:hidden;" id="loadcsv-${oLayer.layerid}"/>`;
+    return `
+    <div class="form-group mb-3">
+      <label for="importFileByUrl" class="mb-1">Charger un fichier via une URL</label>
+      <div class="input-group">
+        <input type="text" class="form-control form-control-sm" id="importFileByUrl" placeholder="http://example.com/file.csv">
+        <button class="btn btn-sm btn-primary" type="button" onclick="fileimport.loadUrlFile('${oLayer.layerid}')">Valider</button>
+      </div>
+    </div>
+    <label for="importFileByUrl" class="mb-1">Téléverser un fichier</label>
+    <div class="dropzone dz-clickable" id="drop_zone" onclick="$('#loadcsv-${oLayer.layerid}').click();" ondrop="fileimport.dropHandler(event);" ondragover="fileimport.dragOverHandler(event);">
+        <div id="csv-status" class="start">
+            <div class="dz-default dz-message"><span class="fas fa-cloud-upload-alt fa-3x"></span>
+                <p i18n="fileimport.upload.dropzone">Glisser un fichier GeoJSON, CSV ou SHP (en ZIP) ici ou clic pour sélectionner un fichier...</p>
+            </div>
+            <div class="dz-work dz-message"><span class="fas fa-spin fa-cog fa-3x"></span>
+                <p i18n="fileimport.upload.processing">Traitement en cours</p>
+            </div>
+        </div>
+    </div>
+    <input type="file" name="filebutton" onchange="fileimport.loadLocalFile('${oLayer.layerid}')" style="visibility:hidden;" id="loadcsv-${oLayer.layerid}"/>`;
+  };
+
+  /**Veifiy if coordinates fields are corrects and return features */
+  const isCorrectCSVCoordFields = (data, oLayer) => {
+    // Check if the CSV has at least two fields for coordinates
+    const parsedData = Papa.parse(data, { header: true });
+    let withXY = parsedData.data.filter((f) => f[oLayer.xfield] && f[oLayer.yfield]);
+    return withXY.length > 0;
+  };
+
+  /**
+   * Private method _loadUrlFile
+   * Reads csv from URL and calls _initCsvModal with parsed data.
+   * @param {*} idLayer
+   */
+  const _loadUrlFile = function (idLayer, urlFromAPI) {
+    const url = urlFromAPI || document.getElementById("importFileByUrl").value;
+    const oLayer = mviewer.getLayers()[idLayer];
+    // clear previous data
+    oLayer.layer.getSource().clear();
+    // read csv from URL
+    fetch(url).then((response) => {
+      if (response.ok) {
+        response.text().then((data) => {
+          // call _mapCSV with parsed data
+          if (oLayer.xfield && oLayer.yfield && isCorrectCSVCoordFields(data, oLayer)) {
+            _mapCSV(data, oLayer, oLayer.layer, "");
+          } else {
+            _initCsvModal(idLayer, data, oLayer, "grist.csv");
+          }
+          oLayer.layer.set("url", url);
+          setPermaLink({
+            file: url,
+            xfield: oLayer.xfield,
+            yfield: oLayer.yfield,
+          });
+        });
+      } else {
+        var alertText = _getI18NAlertMessage(
+          "Problème avec la récupération du fichier csv",
+          "fileimport.alert.fileloading"
+        );
+        mviewer.alert(alertText + response.statusText, "alert-warning");
+      }
+    });
   };
 
   /**
@@ -216,7 +351,7 @@ const fileimport = (function () {
         };
         reader.readAsText(file);
       } else {
-        _initCsvModal(idlayer, file, oLayer);
+        fileToData(idlayer, file, oLayer);
       }
     }
   };
@@ -241,97 +376,19 @@ const fileimport = (function () {
   };
 
   /**
-   * Private method _initCsvModal
-   * Displays and inits modal for csv import, clearing and initializing values and events.
-   * Parses csv to json. Calls _geocode() or _mapCSV() depending on presence of coords in data.
-   * @param {String} idlayer
-   * @param {File} file
-   * @param {Object} oLayer
+   * Private method fileToData
+   * Utility method for _loadLocalFile to read csv file and init modal with data from it.
+   * @param {string} idlayer
+   * @param {*} file
+   * @param {object} oLayer
    */
-  var _initCsvModal = function (idlayer, file, oLayer) {
-    _resetForms();
+  const fileToData = (idlayer, file, oLayer) => {
     var reader = new FileReader();
     //Constraint : file must be encoded in UTF-8 and first line is named fields
     reader.readAsText(file, "UTF-8");
-    reader.onload = function (evt) {
-      //Show wizard modal
-      $("#geocoding-modal").modal("show");
-      $("#geocoding-modal button.geocode").attr("data-layerid", idlayer);
-      //update layer title with file name
-      $("#geocoding-modal .csv-name").val(file.name);
-      //Parse csv file to convert it as json object
-      var tmp = Papa.parse(evt.target.result, { header: true });
-      var fields = [];
-      //Get fields of loaded file
-      tmp.meta.fields.forEach(function (f) {
-        fields.push('<a href="#" class="list-group-item list-group-item-action">' + f + "</a>");
-      });
-      //Update 3 wizard sections with field names
-      $("#geocoding-modal .csv-fields").append(fields.join(" "));
-      //Enable selection on each item
-      $("#geocoding-modal .csv-fields a").click(function () {
-        $(this).toggleClass("active");
-      });
-      //Init coordinate tab with data and events
-      _initCoordsTab(tmp, oLayer);
-      //Launch geocoding with custom parameters
-      $("#geocoding-modal")
-        .off()
-        .on("geocoding-" + idlayer + "-ready", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          //get select fields to use for geocoding
-          var fields = [];
-          var fusefields = [];
-          //get select fields to use for geocoding
-          $("#geocoding-modal .geocoding.csv-fields a.active").each(function (i, f) {
-            fields.push(f.textContent);
-          });
-          // update global layer parameters
-          oLayer.geocodingfields = fields;
-          // get optional selected field to use as citycode (insee)
-          if ($("#geocoding-modal .insee.csv-fields a.active").length > 0) {
-            oLayer.geocodingcitycode = $("#geocoding-modal .insee.csv-fields a.active")
-              .first()
-              .text();
-          } else {
-            oLayer.geocodingcitycode = false;
-          }
-          //Enable fuse search
-          $("#geocoding-modal .search.csv-fields a.active").each(function (i, f) {
-            fusefields.push(f.textContent);
-          });
-          if (fusefields.length > 0) {
-            oLayer.fusesearchkeys = fusefields.join(",");
-            oLayer.fusesearchresult = "{{" + fusefields[0] + "}}";
-            oLayer.searchengine = "fuse";
-            // Enable tooltip as well
-            oLayer.tooltip = true;
-            oLayer.tooltipcontent = oLayer.fusesearchresult;
-            search.processSearchableLayer(oLayer);
-          }
-          //update layer title in legend panel
-          var title = $("#geocoding-modal .csv-name").val();
-          $(".mv-layer-details[data-layerid='" + idlayer + "'] .layerdisplay-title > .layerdisplay-titleLabel > div")
-            .first()
-            .text(title);
-          $(".mv-layer-details[data-layerid='" + idlayer + "']").data(
-            "data-layerid",
-            title
-          );
-
-          if ($("#panelsStayOpen-collapseOne").hasClass("show") !== false) {
-            oLayer.xfield = $("#x-select").val();
-            oLayer.yfield = $("#y-select").val();
-            _mapCSV(evt.target.result, oLayer, oLayer.layer, $("#srs-select").val());
-          } else {
-            // geocode file
-            _geocode(evt.target.result, oLayer, oLayer.layer);
-          }
-          //hide wizard
-          $("#geocoding-modal").modal("hide");
-          return false;
-        });
+    reader.onload = (evt) => {
+      const data = evt.target.result;
+      _initCsvModal(idlayer, data, oLayer, file.name);
     };
     reader.onerror = function (evt) {
       alert(
@@ -341,6 +398,103 @@ const fileimport = (function () {
         )
       );
     };
+  };
+
+  /**
+   * Private method _initCsvModal
+   * Displays and inits modal for csv import, clearing and initializing values and events.
+   * Parses csv to json. Calls _geocode() or _mapCSV() depending on presence of coords in data.
+   * @param {String} idlayer
+   * @param {File} file
+   * @param {Object} oLayer
+   */
+  var _initCsvModal = function (idlayer, data, oLayer, name) {
+    _resetForms();
+
+    //Show wizard modal
+    $("#geocoding-modal").modal("show");
+    $("#geocoding-modal button.geocode").attr("data-layerid", idlayer);
+    //update layer title with file name
+    $("#geocoding-modal .csv-name").val(name);
+    //Parse csv file to convert it as json object
+    var tmp = Papa.parse(data, { header: true });
+    var fields = [];
+    //Get fields of loaded file
+    tmp.meta.fields.forEach(function (f) {
+      fields.push('<a href="#" class="list-group-item">' + f + "</a>");
+    });
+    //Update 3 wizard sections with field names
+    $("#geocoding-modal .csv-fields").append(fields.join(" "));
+    //Enable selection on each item
+    $("#geocoding-modal .csv-fields a").click(function () {
+      $(this).toggleClass("active");
+    });
+    //Init coordinate tab with data and events
+    _initCoordsTab(tmp, oLayer);
+    //Launch geocoding with custom parameters
+    $("#geocoding-modal")
+      .off()
+      .on("geocoding-" + idlayer + "-ready", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        //get select fields to use for geocoding
+        var fields = [];
+        var fusefields = [];
+        //get select fields to use for geocoding
+        $("#geocoding-modal .geocoding.csv-fields a.active").each(function (i, f) {
+          fields.push(f.textContent);
+        });
+        // update global layer parameters
+        oLayer.geocodingfields = fields;
+        // get optional selected field to use as citycode (insee)
+        if ($("#geocoding-modal .insee.csv-fields a.active").length > 0) {
+          oLayer.geocodingcitycode = $("#geocoding-modal .insee.csv-fields a.active")
+            .first()
+            .text();
+        } else {
+          oLayer.geocodingcitycode = false;
+        }
+        //Enable fuse search
+        $("#geocoding-modal .search.csv-fields a.active").each(function (i, f) {
+          fusefields.push(f.textContent);
+        });
+        if (fusefields.length > 0) {
+          oLayer.fusesearchkeys = fusefields.join(",");
+          oLayer.fusesearchresult = "{{" + fusefields[0] + "}}";
+          oLayer.searchengine = "fuse";
+          // Enable tooltip as well
+          oLayer.tooltip = true;
+          oLayer.tooltipcontent = oLayer.fusesearchresult;
+          search.processSearchableLayer(oLayer);
+        }
+        //update layer title in legend panel
+        var title = $("#geocoding-modal .csv-name").val();
+        $(
+          ".mv-layer-details[data-layerid='" +
+            idlayer +
+            "'] .layerdisplay-title > .layerdisplay-titleLabel > div"
+        )
+          .first()
+          .text(title);
+        $(".mv-layer-details[data-layerid='" + idlayer + "']").data(
+          "data-layerid",
+          title
+        );
+
+        if ($("#panelsStayOpen-collapseOne").hasClass("show") !== false) {
+          oLayer.xfield = $("#x-select").val();
+          oLayer.yfield = $("#y-select").val();
+          oLayer.layer.set("xfield", oLayer.xfield);
+          oLayer.layer.set("yfield", oLayer.yfield);
+          _mapCSV(data, oLayer, oLayer.layer, $("#srs-select").val());
+        } else {
+          // geocode file
+          _geocode(data, oLayer, oLayer.layer);
+        }
+        //hide wizard
+        $("#geocoding-modal").modal("hide");
+        return false;
+      });
   };
 
   /**
@@ -573,7 +727,7 @@ const fileimport = (function () {
             return;
           }
           features.push(result.value);
-          return source.read().then(add);          
+          return source.read().then(add);
         })
       )
       .catch((error) => console.error(error.stack));
@@ -604,9 +758,7 @@ const fileimport = (function () {
       $.ajax({
         type: "POST",
         processData: false,
-        url: oLayer.geocoderurl
-          ? oLayer.geocoderurl
-          : "https://data.geopf.fr/geocodage/search/csv/",
+        url: oLayer?.geocoderurl || API_CSV,
         data: formData,
         contentType: false,
         success: function (data) {
@@ -638,47 +790,50 @@ const fileimport = (function () {
    * @param {Object} l
    * @param {String} srs
    */
-  var _mapCSV = function (data, oLayer, l, srs) {
+  var _mapCSV = function (data, oLayer, l, srs, title) {
     var _epsg = srs ? srs : "EPSG:4326";
     var _source = l.getSource();
-    var _features = [];
     l.setStyle(getImportStyle.bind(this));
     //Parse geocoded results
     var results = Papa.parse(data, { header: true });
-    
-    results.data.forEach(function (a) {
-      //create geometries from xfield and y field
-      if (a[oLayer.xfield] && a[oLayer.yfield]) {
-        var feature = new ol.Feature({
-          geometry: new ol.geom.Point(
-            ol.proj.transform(
-              [
-                parseFloat(a[oLayer.xfield].replace(",", ".")),
-                parseFloat(a[oLayer.yfield].replace(",", ".")),
-              ],
-              ol.proj.get(_epsg),
-              oLayer.mapProjection
-            )
-          ),
-        });
-        feature.setProperties(a);
-        _features.push(feature);
-      } else {
-        console.log("paramètres xfield et yfields manquants");
-      }
+
+    let withXY = results.data.filter((f) => f[oLayer.xfield] && f[oLayer.yfield]);
+    if (withXY) {
+      oLayer.layer.set("xfield", oLayer.xfield);
+      oLayer.layer.set("yfield", oLayer.yfield);
+    }
+    let features = withXY.map((f) => {
+      var feature = new ol.Feature({
+        geometry: new ol.geom.Point(
+          ol.proj.transform(
+            [
+              parseFloat(f[oLayer.xfield].replace(",", ".")),
+              parseFloat(f[oLayer.yfield].replace(",", ".")),
+            ],
+            ol.proj.get(_epsg),
+            oLayer.mapProjection
+          )
+        ),
+      });
+      feature.setProperties(f);
+      return feature;
     });
     // Add features to layer source
     // if fusesearch is enabled in config, 'change' event is fired and handled in the  _processSearchableLayer method (search.js)
-    _source.addFeatures(_features);
+    _source.addFeatures(features);
     // zoom to layer extent
-    utils.zoomToFeaturesExtent(_source.getFeatures());
+    if (l.getVisible()) {
+      utils.zoomToFeaturesExtent(_source.getFeatures());
+    }
     $("#csv-status").attr("class", "start");
     //draw layer Legend
     oLayer.legend = {
       items: [
         {
           styles: [getImportStyle(oLayer.layer.getSource().getFeatures()[0])],
-          label: "Points",
+          label:
+            document.getElementsByClassName("csv-name form-control")?.[0]?.value ||
+            "Points CSV",
           geometry: "Point",
         },
       ],
@@ -703,6 +858,12 @@ const fileimport = (function () {
           return response.text();
         })
         .then((data) => {
+          // insert url into layer prop to be shared in permalink
+          oLayer.layer.set("url", oLayer.url);
+          setPermaLink({
+            file: oLayer.url,
+          });
+          // geocoding
           _geocode(data, oLayer, l);
         })
         .catch((error) => {
@@ -802,16 +963,51 @@ const fileimport = (function () {
       mviewer.alert(alertText + ": " + err.message, "alert-warning");
     }
   };
+  /*
+   * Private method _createLayerFromApi
+   * Creates layer from API file if URL param is available.
+   * Layer will be processed and added to map as native layer.
+   */
+  const _createLayerFromApi = () => {
+    if (API.file) {
+      // default oLayer params
+      let params = createDefaultOLayerOption(_.uniqueId(), "fichier csv", {
+        xfield: API?.xfield,
+        yfield: API?.yfield,
+      });
+      // create vector layer and add it to map
+      configuration.createVectorLayer(params, {
+        url: API.file,
+      });
+    }
+  };
+
+  setPermaLink = (params) => {
+    API = { ...API, ...params };
+  };
+
   return {
     init: function () {
+      // Avoid to use existing XML layer. Allow to create a new one with default params.
+      _createLayerFromApi();
+
+      // parse layers and load data, or show wizard modal
       var layers = mviewer.getLayers();
+      let layerAPIToUse = null;
       for (var layer in layers) {
         if (layers[layer].type === "import") {
           var oLayer = layers[layer];
-          if (oLayer.url) {
-            _loadCSV(oLayer, oLayer.layer);
+          if (oLayer.urlparam && !oLayer?.geocoder) {
+            _loadUrlFile(oLayer.id, API.file);
+          } else if (oLayer.urlparam && oLayer?.geocoder) {
+            _loadCSV(oLayer, oLayer.layer, API.file);
+          } else if (oLayer.url && !oLayer?.geocoder === "BAN") {
+            _loadUrlFile(oLayer.id, oLayer.url);
+          } else if (oLayer.geocoder && oLayer.url) {
+            _loadCSV(oLayer, oLayer.layer, oLayer.url);
           } else {
             _initLoaderFile(oLayer);
+            layerAPIToUse = oLayer;
             _buttonActive = oLayer.visiblebydefault;
             _importLayer = oLayer;
             $(`.nav-pills [data-layerid=${oLayer.layerid}]`).on("click", function () {
@@ -847,6 +1043,7 @@ const fileimport = (function () {
       });
     },
     loadLocalFile: _loadLocalFile,
+    loadUrlFile: _loadUrlFile,
     geocodeit: _geocodeit,
     dragOverHandler: function (ev) {
       // Prevent default behavior (Prevent file from being opened)

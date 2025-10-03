@@ -92,3 +92,40 @@ Exemple qui rend disponible l'IHM de l'extension, permettant l'import `geojson`,
 ````
 
 L'IHM de l'import peut être accédé par le bouton du composant custom ou directement via l'arbre des couches.
+
+### Afficher un CSV renseigner dans l'URL
+
+Il est possible d'indiquer au mviewer de charger un CSV lors du premier chargement de la carte, sans aucune action de la part de l'utilisateur.
+
+Trois paramètres sont disponibles et à renseigner dans l'URL :
+
+- **xfield** : (option) Nom du champ dans le fichier CSV contenant la coordonnée X (longitude) 
+- **yfield** : (option) Nom du champ dans le fichier CSV contenant la coordonnée Y (latitude)
+- **file** : URL complète encodée du fichier CSV
+
+Exemple :
+
+https://monmviewer.fr?config=demo/csv.xml&file=https%3A%2F%2Fgrist.numerique.gouv.fr%2Fapi%2Fdocs%2F1HG28XWE7Ypy9eBJzper6N%2Fdownload%2Fcsv%3FtableId%3DTopologie_des_stations_le_velo_star&xfield=latitude&yfield=longitude
+
+Cet exemple contient 3 paramètres : 
+
+- **xfield** : latitude
+- **yfield** : longitude
+- **file** : https%3A%2F%2Fgrist.numerique.gouv.fr%2Fapi%2Fdocs%2F1HG28XWE7Ypy9eBJzper6N%2Fdownload%2Fcsv%3FtableId%3DTopologie_des_stations_le_velo_star
+
+Lors du partage de la carte, ces paramètres sont conserver dans le lien de partage.
+
+### Afficher un CSV à partir d'une URL via l'interface de chargement
+
+Plus haut, la description indique qu'il est possible de charger un fichier (import) depuis sont ordinateur.
+
+Il est également possible d'utiliser le champ "Charger un fichier" qui permettra de renseigner une URL de CSV à afficher sur la carte.
+
+Le fonctionnement avec les paramètres xfield et yfield reste identique :
+
+- si le CSV contient les champs renseignés dans la configuration (XML) de la couche, alors les données s'affichent sur la carte directement
+
+- si le CSV ne contient pas les champs renseignés, alors la fenêtre de configuration s'affiche pour indiquer les champs à utiliser pour localiser les données
+
+
+Lors du partage de la carte, les paramètres sont ajouter dans le lien de partage afin d'avoir affichées  lors du chargement de la carte à partir des paramètres d'URL.
