@@ -7,7 +7,7 @@
  */
 
 // north arrow
-const defaultNorthImgUrl = "demo/addons/print/img/NorthArrow.png";
+const defaultNorthImgUrl = "addons/print/img/NorthArrow.png";
 
 // default basemap layers
 // Required !

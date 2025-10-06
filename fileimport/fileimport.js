@@ -67,7 +67,7 @@ const fileimport = (function () {
       attributestylesync: false,
       attributefilterenabled: false,
       customcontrol: false,
-      customcontrolpath: "customcontrols",
+      customcontrolpath: "demo/customcontrols",
       exclusive: false,
       searchable: false,
       checked: true,
@@ -559,10 +559,7 @@ const fileimport = (function () {
    */
   var _unzip = function (file, oLayer) {
     zip.workerScripts = {
-      inflater: [
-        "demo/addons/fileimport/lib/z-worker.js",
-        "demo/addons/fileimport/lib/inflate.js",
-      ],
+      inflater: ["addons/fileimport/lib/z-worker.js", "addons/fileimport/lib/inflate.js"],
     };
     zip.createReader(
       new zip.BlobReader(file),
