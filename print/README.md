@@ -30,7 +30,7 @@ So, use this extension as simple mviewer extension.
 <application id="my_print_app" title="A super title" />
 ```
 
-3. Now, open demo/addons/print/config.json file and insert you application id to create a dedicated configuration by mviewer app :
+3. Now, open addons/print/config.json file and insert you application id to create a dedicated configuration by mviewer app :
 
 In options (create this key if not available), insert `options.mviewer.applicationid` (change applicationid by application id value) like :
 
@@ -61,7 +61,7 @@ Only 3 application properties are possible in the config.json file :
   "options": {
     "mviewer": {
       "print": {
-        "printLayouts": "demo/addons/print/layouts/standard.json",
+        "printLayouts": "addons/print/layouts/standard.json",
         "ownerLogo": "https://avatars.githubusercontent.com/u/114171481?s=400&u=7fcf63ac01887ece3f5f2d5527e92c10527c7a91&v=4",
         "ownerInfos": "This is default text to present mviewer map."
       }
@@ -77,7 +77,7 @@ A template represents the configuration of the elements to be printed in a JSON 
 
 According to the previous configuration, you can use a custom layout template by mviewer application.
 
-The default template is available in `demo/addons/print/layouts/standard.json`.
+The default template is available in `addons/print/layouts/standard.json`.
 
 We will describe it in next chapters to understand how to create you own template (_open standard.json template beside for a better understanding_) .
 
@@ -231,7 +231,7 @@ Also, you can display an item for landscape and remove it for portrait :
 
 Default elements already have default values :
 
-https://github.com/jdev-org/mviewer/blob/c857f6d839cf028756e4a7f6a86035dbe89cbb94/demo/addons/print/js/const.js#L2-L10
+https://github.com/jdev-org/mviewer/blob/c857f6d839cf028756e4a7f6a86035dbe89cbb94/addons/print/js/const.js#L2-L10
 
 **You can also use these properties to override default values.**
 

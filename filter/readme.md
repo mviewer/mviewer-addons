@@ -71,7 +71,7 @@ Les filtres peuvent être de type combobox, date, checkbox, button, textbox.
 
 Voici un exemple de représentation pour des attributs (dans l'ordre, de type combobox, button, textbox, button, combobox) :
 
-![capture filterLayer](https://github.com/geobretagne/mviewer/blob/develop/demo/addons/filter/img/filterLayer.PNG)
+![capture filterLayer](https://github.com/geobretagne/mviewer/blob/develop/addons/filter/img/filterLayer.PNG)
 
 Pour chaque attribut à filtrer, vous avez besoin de ces propriétés obligatoires : 
 
@@ -115,7 +115,7 @@ Cette propriété permet de mettre à jour l'interface des filtres selon les att
 
 Ainsi, si notre attribut `marché` de type liste (combobox) est configuré `updateOnChange: true` et que les entités filtrées et visibles à l'écran n'ont que 2 valeurs de marché, alors la liste ne contiendra que les deux valeurs de marché selon le filtre réalisé.
 
-Vous aurez un exemple ici de configration :  [exemple pour l'image précédente](https://github.com/geobretagne/mviewer/blob/master/demo/addons/filter/config.json#L22-L47).
+Vous aurez un exemple ici de configration :  [exemple pour l'image précédente](https://github.com/geobretagne/mviewer/blob/master/addons/filter/config.json#L22-L47).
 
 
 **4. Ajouter des boutons pour télécharger les données filtrées (uniquement pour les source WFS)**
@@ -146,7 +146,7 @@ En indiquant le séparateur, le plugin sera capable de proposer de filtrer la co
 
 Vous pouvez retrouver un exemple complet dans les dossiers suivants : 
 
-* Fichier de configuration du plugin : [demo/addons/filter/config.json](https://github.com/geobretagne/mviewer/blob/master/demo/addons/filter/config.json)
+* Fichier de configuration du plugin : [addons/filter/config.json](https://github.com/geobretagne/mviewer/blob/master/addons/filter/config.json)
 * Fichier de configuration de la carte : [demo/filter/filter.xml](https://github.com/geobretagne/mviewer/blob/master/demo/filter/filter.xml)
 
 Dans cet exemple, le Mviewer a un identifiant repectif "filter" tel que dans le config.xml : 
@@ -190,7 +190,7 @@ la configuration vous permet de modifier le style selon ces propriétés :
 },
 ```
 
-[code lié](https://github.com/geobretagne/mviewer/blob/feature-652/demo/addons/filter/js/filter.js#L996-L1011)
+[code lié](https://github.com/geobretagne/mviewer/blob/feature-652/addons/filter/js/filter.js#L996-L1011)
 ## Pour aller plus loin...
 
 Une section de la documentation mviewer est disponible pour bien comprendre et mettre en oeuvre les plugins : 

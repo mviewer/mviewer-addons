@@ -28,7 +28,7 @@ Une fois la configuration effectuée, un nouveau bouton **Panoramax** apparaît 
 
 ## Configuration avancée
 
-Il est possible de modifier les configurations avancées de l'extension à travers le fichier `demo/addons/panoramax/config.json`, dans l'objet `options.panoramax` :
+Il est possible de modifier les configurations avancées de l'extension à travers le fichier `addons/panoramax/config.json`, dans l'objet `options.panoramax` :
 
 - `url` : URL du serveur Panoramax à utiliser (par défaut le catalogue général : `https://explore.panoramax.fr`)
 - `open_at_start`: le plugin doit-il être affiché au chargement initial (`true` ou `false`).

@@ -89,7 +89,7 @@ Pour fonctionner, le plugin a besoin des paramètres suivants :
 
 ## Exemple
 Vous pouvez retrouver un exemple complet dans les dossiers suivants :
--   Fichier de configuration du plugin : demo/addons/zoomToArea/config.json
+-   Fichier de configuration du plugin : addons/zoomToArea/config.json
 -   Fichier de configuration de la carte : demo/zoomtoarea.xml
 
 Visible également sur la page des démonstrations mviewer.
