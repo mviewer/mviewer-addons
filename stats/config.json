@@ -1,5 +1,5 @@
 {
-  "js": ["js/stats.js", "js/jquery.easyDrag.min.js"],
+  "js": ["js/stats.js", "../lib/jquery.easyDrag.min.js"],
   "css": "css/stats.css",
   "html": "stats.html",
   "target": "page-content-wrapper",

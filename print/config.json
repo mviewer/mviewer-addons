@@ -1,8 +1,8 @@
 {
   "js": [
     "js/print.js",
-    "lib/easydrag/jquery.easyDrag.min.js",
-    "lib/html2pdf/html2pdf.bundle.min.js"
+    "../lib/jquery.easyDrag.min.js",
+    "../lib/html2pdf/html2pdf.bundle.min.js"
   ],
   "css": "style.css",
   "type": "module",

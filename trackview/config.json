@@ -1,8 +1,8 @@
 {
   "type": "module",
   "js": [
-    "lib/Chart.min.js",
-    "lib/turf.min.js",
+    "../lib/Chart.min.js",
+    "../lib/turf.min.js",
     "js/custom-dropdown.js",
     "js/trackview.js"
   ],
