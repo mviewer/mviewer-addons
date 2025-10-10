@@ -6,6 +6,12 @@ Addons for mviewer v4 or superior compliant with Bootstrap 5.
 
 This branch works is only compliant with mviewer Bootstrap 5.
 
+# How to create a custom component (alias addon) ?
+
+Follow the guide : 
+
+https://mviewerdoc.readthedocs.io/fr/latest/doc_dev/customcomponent.html
+
 # How to use ?
 
 This repository contains all available addons for mviewer.
