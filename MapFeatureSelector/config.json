@@ -1,5 +1,5 @@
 {
-  "js": ["MapFeatureSelector.js", "js/jquery.easyDrag.min.js"],
+  "js": ["MapFeatureSelector.js", "../lib/jquery.easyDrag.min.js"],
   "css": "style.css",
   "html": "MapFeatureSelector.html",
   "target": "page-content-wrapper",

@@ -1,5 +1,5 @@
 {
-  "js": ["isochroneAddon.js", "jquery.easyDrag.min.js"],
+  "js": ["isochroneAddon.js", "../lib/jquery.easyDrag.min.js"],
   "css": "isochroneAddon.css",
   "html": "isochroneAddon.html",
   "target": "page-content-wrapper",

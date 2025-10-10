@@ -1,5 +1,5 @@
 {
-  "js": ["lib/index.js", "js/jquery.easyDrag.min.js", "js/panoramax.js"],
+  "js": ["lib/index.js", "../lib/jquery.easyDrag.min.js", "../lib/panoramax.js"],
   "html": "panoramax.html",
   "css": "lib/index.css",
   "target": "map",

@@ -1,10 +1,10 @@
 {
   "js": [
-    "lib/papaparse.min.js",
-    "lib/zip.js",
-    "lib/z-worker.js",
-    "lib/inflate.js",
-    "lib/shapefile.min.js",
+    "../lib/papaparse.min.js",
+    "../lib/zip.js",
+    "../lib/z-worker.js",
+    "../lib/inflate.js",
+    "../lib/shapefile.min.js",
     "fileimport.js",
     "featurestyles.js"
   ],
