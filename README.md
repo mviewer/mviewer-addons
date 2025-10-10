@@ -1,6 +1,6 @@
 # mviewer-addons
 
-Official and community addons for mviewer v4 or superior compliant with Bootstrap 5.
+Addons for mviewer v4 or superior compliant with Bootstrap 5.
 
 # Prerequisites
 
@@ -8,10 +8,26 @@ This branch works is only compliant with mviewer Bootstrap 5.
 
 # How to use ?
 
-This repository contains `officials` and `community` addons.
+This repository contains all available addons for mviewer.
 
-## What's the difference ?
+You can : 
+- take addons one by one (copy an addon to mviewer /apps directory)
+- take all of this directory as submodule into mviewer directory
 
-Officials are kept in line with the versions and maintained.
+# About library management
 
-Community add-ons are not fully maintained and and may contain bugs or issues. They may also work very well, but we cannot guarantee it.
+If you create a new addon with external javascript library, Check into /lib directory if the library if not already available.
+If the needed lib is already inside /lib, just use it.
+
+If not, you will need to import the library's files into /lib directory. This allow other addon to use samed library and avoid too many useless library dupplication.
+
+Finally, set the correct lib path to use it from config.json file : 
+
+```
+  "js": [
+    "js/print.js",
+    "../lib/jquery.easyDrag.min.js",
+    "../lib/html2pdf/html2pdf.bundle.min.js"
+  ],
+
+```
