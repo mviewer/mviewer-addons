@@ -6,7 +6,7 @@ Addons for mviewer v4 or superior compliant with Bootstrap 5.
 
 This branch works is only compliant with mviewer Bootstrap 5.
 
-# How to create a custom component (alias addon) ?
+# How to create a custom component (alias addon) ?
 
 Follow the guide : 
 
