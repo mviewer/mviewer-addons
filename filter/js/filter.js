@@ -76,6 +76,7 @@ const filter = (function () {
       mviewer.getMap().once("rendercomplete", function (e) {
         _prepareReadyLayers(layersParams);
         _initFilterPanel();
+        handleFilterPlacement();
       });
 
       //Add filter button to toolstoolbar
@@ -119,7 +120,7 @@ const filter = (function () {
           // show panel if wanted
           if (
             mviewer.customComponents.filter.config.options.open &&
-            window.innerWidth > 360
+            !configuration.getConfiguration().mobile
           ) {
             $("#advancedFilter").show();
             $("#filterbtn").addClass("active");
@@ -127,7 +128,7 @@ const filter = (function () {
 
           // Add draggable on panel
           $("#advancedFilter").easyDrag({
-            handle: "h2",
+            handle: "h2 .filter__title",
             container: $("#map"),
           });
 
@@ -155,13 +156,34 @@ const filter = (function () {
    * Open filtering panel
    **/
   var _toggle = function () {
-    // show or hide filter panel
-    if ($("#advancedFilter").is(":visible")) {
-      $("#filterbtn").removeClass("active");
-      $("#advancedFilter").hide();
+    const isMobile = configuration.getConfiguration().mobile;
+    const filterBtn = document.getElementById("filterbtn");
+    const filter = document.getElementById("advancedFilter");
+
+    if (isMobile) {
+      const modalElement = document.getElementById("filterModal");
+      if (!modalElement) return; // sécurité
+
+      const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+      const isVisible = modalElement.classList.contains("show");
+
+      if (isVisible) {
+        modalInstance.hide();
+        filterBtn.classList.remove("active");
+      } else {
+        modalInstance.show();
+        filterBtn.classList.add("active");
+      }
     } else {
-      $("#advancedFilter").show();
-      $("#filterbtn").addClass("active");
+      const isVisible = filter.style.display !== "none";
+
+      if (isVisible) {
+        filter.style.display = "none";
+        filterBtn.classList.remove("active");
+      } else {
+        filter.style.display = "block";
+        filterBtn.classList.add("active");
+      }
     }
   };
 
@@ -1103,6 +1125,67 @@ const filter = (function () {
     $(".label-info").css("color", style.textSelectBtnColor);
     $(".form-check-label-checked").css("background-color", style.selectedBtnColor);
   };
+
+  /* Mobile */
+  function createFilterModal() {
+    const parent = document.getElementById("filter-custom-component");
+    if (!parent || document.getElementById("filterModal")) return;
+
+    const modalHTML = `
+      <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" onclick="filter.toggle();" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body" id="modalFilterContent"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const temp = document.createElement("div");
+    temp.innerHTML = modalHTML;
+    const modal = temp.firstElementChild;
+    parent.appendChild(modal);
+  }
+
+  function destroyFilterModal() {
+    const modal = document.getElementById("filterModal");
+    if (modal) {
+      const bsModal = bootstrap.Modal.getInstance(modal);
+      if (bsModal) bsModal.dispose(); // Nettoyage Bootstrap
+      modal.remove();
+    }
+  }
+
+  function handleFilterPlacement() {
+    const filterDiv = document.getElementById("advancedFilter");
+    const desktopParent = document.getElementById("filter-custom-component");
+    const filterBtn = document.getElementById("filterbtn");
+
+    if (configuration.getConfiguration().mobile) {
+      createFilterModal(); // ajoute la modale si nécessaire
+      document.getElementById("advancedFilter").classList.remove("easydrag_enabled");
+      document.querySelector("#advancedFilter .filter__title").style.cursor = "default";
+
+      const modalBody = document.getElementById("modalFilterContent");
+      if (modalBody && !modalBody.contains(filterDiv)) {
+        modalBody.appendChild(filterDiv);
+      }
+      filterBtn.classList.remove("active");
+    } else {
+      destroyFilterModal();
+
+      if (!desktopParent.contains(filterDiv)) {
+        desktopParent.appendChild(filterDiv);
+      }
+      document.querySelector("#advancedFilter .filter__title").style.cursor = "move";
+    }
+  }
+
+  window.addEventListener("load", handleFilterPlacement);
+  window.addEventListener("resize", handleFilterPlacement);
 
   return {
     init: () => _initFilterTool(),
