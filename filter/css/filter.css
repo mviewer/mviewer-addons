@@ -1,4 +1,6 @@
-.advancedFilter {
+/* Desktop */
+
+#filter-custom-component > .advancedFilter {
   background-color: #FFFFFF;
   display: none;
   text-align: left;
@@ -11,6 +13,22 @@
   z-index: 1000 !important;
   box-shadow: 0px 0px 30px 3px rgba(200, 200, 200, 0.5);
 }
+
+/* Mobile */
+
+#filterModal {
+    z-index: 1500;
+}
+
+#filterModal #advancedFilter {
+    display: block!important;
+}
+
+#filterModal #advancedFilter-closeAll {
+    display: none!important;
+}
+
+/* All */
 
 .advancedFilter h2 {
     font-size: large;
@@ -71,7 +89,6 @@
     color: #505050;
     transition: .3s;
 }
-
 
 .advancedFilter .filterCheck__list .form-check-label:hover {
   background-color: color-mix(in srgb, var(--mv-color-primary) 80%, rgba(255, 255, 255, 0));
