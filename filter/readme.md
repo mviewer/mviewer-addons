@@ -164,7 +164,7 @@ et dans le config.json :
       "filter":{
 
 ```
-## Mdoifier le style
+## Modifier le style
 
 la configuration vous permet de modifier le style selon ces propriétés : 
 
