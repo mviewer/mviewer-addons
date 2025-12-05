@@ -50,7 +50,7 @@ var panoramax = (function () {
    */
   var _initToolbarBtn = () => {
     var button = [
-      '<button id="panoramaxBtn" title href="#" type="button" class="btn btn-light" data-original-title="Panoramax" data-toggle="tooltip">' +
+      '<button id="panoramaxBtn" href="#" type="button" class="btn btn-light" title="Panoramax" data-toggle="tooltip">' +
         '<span class="fas fa-street-view"></span>' +
         "</button>",
     ].join("");
@@ -222,7 +222,7 @@ var panoramax = (function () {
         _pnxMapFiltersContainer.innerHTML = `
           <div class="layerdisplay-title">
             <a>Panoramax</a>
-            <a href="#" class="mv-layer-remove" aria-label="close"title="" i18n="theme.layers.remove" data-original-title="Supprimer">
+            <a href="#" class="mv-layer-remove" aria-label="close" title="Supprimer" i18n="theme.layers.remove">
               <i class="ri-close-large-line"></i>
             </a>
           </div>
