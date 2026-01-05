@@ -9,6 +9,12 @@ https://hytech-imaging.fr/
 <img width="400" height="101" alt="image" src="https://github.com/user-attachments/assets/f9f5c629-d071-4f8d-a070-8638b7760afe" />
 
 
+
+## Compatibilité
+
+Cette extension a été réalisée et testée avec mviewer 3.x (< à v4 donc).
+Cette extension n'a pas été testéée avec mviewer 4, il est donc possible que vous constatiez des anomalies avec mviewer >= v4.
+
 ## Présentation 
 Cette extension permet de sélectionner une année et une saison au sein d'une interface unique pour un ensemble de couches WMS d'une application mviewer.
 
