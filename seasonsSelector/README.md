@@ -87,87 +87,42 @@ utilisez ensuite cette identifiant dans le fichier config.json.
 
 ### Paramètres disponibles
 
-**Tous les paramètre notés d'un `(!)` sont obligatoires.**
+| Paramètre          | Type       | Obligatoire | Valeurs possibles                       | Valeur par défaut | Description / Notes                                                                                                                                                                                                                                             | Exemple                                        |
+| ------------------ | ---------- | :---------: | --------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `default`          | `object`   |     Non     | `{ year: number, season: string }`      | `{}`              | Définit l’année et la saison sélectionnées par défaut.                                                                                                                                                                                                          | `{ "year": 2023, "season": "11" }`             |
+| `fromCapabilities` | `boolean`  |     Non     | `true \| false`                         | `false`           | Si `true`, les années sont récupérées via les **getCapabilities** des services des couches. Les saisons sont filtrées en comparant les valeurs retournées avec la configuration `seasons`. Si `false`, années et saisons doivent venir de `years` et `seasons`. | `true`                                         |
+| `separator`        | `string`   |     Non     | —                                       | `null`            | Séparateur utilisé par une RegEx pour identifier l’année depuis les valeurs `TIME` retournées par les **getCapabilities**. Fonctionne uniquement si le format `TIME` est identique pour toutes les couches.                                                     | Pour `TIME=2023-11`, séparateur = `"-"`        |
+| `timePattern`      | `string`   |  Oui `(!)`  | —                                       | —                 | Permet de construire le paramètre `TIME` en fonction du positionnement de `{year}` et `{season}` lors du clic sur une année/saison. Peut utiliser `separator`.                                                                                                  | `"{year}{separator}{season}"` → `TIME=2023-05` |
+| `seasons`          | `object[]` |  Oui `(!)`  | Liste d’objets `{ id, label, value }`   | —                 | Liste des saisons affichées sous forme de boutons. Chaque objet définit : **id** (lien avec l’icône), **label** (nom), **value** (valeur utilisée pour le filtre `TIME`). Si une saison n’est pas présente, son bouton n’est pas affiché.                       | Voir ci-dessous                                |
+| `layersId`         | `string[]` |  Oui `(!)`  | Liste d’identifiants de couches mviewer | —                 | Liste des couches concernées par le changement de saison ou d’année.                                                                                                                                                                                            | `["layer_1", "layer_2", "layer_3"]`            |
 
-* **default <object>** 
 
-> Valeurs possibles: `{year: number, season: string}` - défaut: `{}`
-
-Permet de définir l'année et la saison sélectionnées par défaut.
-
-* **fromCapabilities `<boolean>`**
-
-> Valeurs possibles: `true|false` - défaut: `false`
-
-Si `true`, les valeurs d'années sélectionnables seront récupérées des getCapabilities des services des couches à utiliser. Pour les saisons, les valeurs seront comparées avec la configuration seasons définies plus bas pour n'afficher que les saisons confiugrés et retournées via les appels getCapabilities.
-
-Si `false`, les valeurs d'années et saisons doivent être lues depuis les paramètres `years` et `seasons` (voir plus bas pour ces deux paramètres).
-
-* **separator `<string>`**
-
-> Valeur par défaut: null
-
-Ce séparateur est utilisé par une RegEx qui permet d'identifier l'année de la saison lors de la lecture des valeurs TIME retournées par les getCapabilities.
-Ce paramètre ne fonctionne que si le format de la valeur TIME est identique à toutes les couches.
-
-Exemple :
-
-Pour une valeur TIME `2023-11`, le séparateur est `-`.
-
-* **(!) timePattern `<string>`**
-
-Permet d'identifier le positionnement de l'année et de la saison pour construire le paramètre TIME lors du clique sur une année ou une saison.
-
-Exemple :
-
-Avec la configuration `"timePattern": "{year}{season}"`, le paramètre envoyé avec une année 2023 et une saison automne (valeur 11) sera : *&TIME=2023-05*.
-
-> Notez la présence d'un séparateur défini avec le paramètre `separator` défini plus haut.
-
-* **(!) seasons `<object[]>`**
-
-Ce paramètre est une liste d'objet qui representé un bouton. Il y aura autant de saisons sélectionnables que d'objet dans cette liste.
-
-Un objet (donc une saison) se caractérise par : 
-
-- Un id unique et fix qui représente une saison et qui permet le lien avec l'image :
+**Rappel des IDs de saisons (liés aux SVG) :**
 
 | ID | Saison        |
-|----|---------------|
-| 0  | SVG Hiver     |
-| 1  | SVG Printemps |
-| 2  | SVG Ete       |
-| 3  | SVG Automne   |
+| -: | ------------- |
+|  0 | SVG Hiver     |
+|  1 | SVG Printemps |
+|  2 | SVG Été       |
+|  3 | SVG Automne   |
 
-- Un label personnalisable permettant de définir le nom de la saison.
-
-- Une valeur qui permet, selon le service TIME, de lier la saison et le bouton pour réaliser le filtre au clique sur une saison. Cette saisie est nécessaire car les valeurs peuvent être différentes d'une application à une autre.
-
-
-Exemple : 
+**Exemple seasons :**
 
 ```
-    "seasons": [
-        {"id":1, "label":"Printemps", "value": "05"},
-        {"id":2, "label": "Eté", "value": "08"},
-        {"id":3, "label": "Automne", "value": "11"}
-    ],
+"seasons": [
+  {"id": 1, "label": "Printemps", "value": "05"},
+  {"id": 2, "label": "Eté",       "value": "08"},
+  {"id": 3, "label": "Automne",   "value": "11"}
+]
 ```
 
-> Notez que la configuration des saisons ne contient pas l'hiver. Le bouton Hiver ne sera donc pas affiché.
-
-* **(!) layersId `<string[]>`**
-
-Ce paramètre est une liste d'identifiant de couche mviewer.
-Il permet d'indiquer les couches concernées par le changement de saison ou d'année.
-
-Exemple :
+**Exemple layersId :**
 
 ```
 "layersId": ["layer_1", "layer_2", "layer_3"]
 ```
 
-### Exemple de configuration complète : 
+## Exemple de configuration complète : 
 
 ```
 {
