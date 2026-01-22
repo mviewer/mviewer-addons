@@ -1,7 +1,7 @@
 {
     "type": "module",
     "js": [
-        "js/main.js", "../lib/jquery.easyDrag.min.js"
+        "js/main.js", "lib/jquery.easyDrag.min.js"
     ],
     "css": ["css/main.css"],
     "html": "seasons-selector.html",

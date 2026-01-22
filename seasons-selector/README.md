@@ -1,4 +1,4 @@
-# SeasonsSelector
+# Seasons-selector
 
 Cette extension a été financée par Hytech Imaging sur les spécifications d'un besoin spécifique.
 
