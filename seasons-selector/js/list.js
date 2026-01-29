@@ -42,7 +42,7 @@ export const createListFromYears = (years) => {
     
     const sortedYears = _.sortedUniq(years).reverse();
     document.querySelector("#seasonYearsUl").innerHTML = "";
-    const yearsLi = sortedYears.map(year => `<li><a class="seasonYearEL" value="${year}">${year}</a></li>`);
+    const yearsLi = sortedYears.map(year => `<li><a class="seasonYearEL dropdown-item" value="${year}">${year}</a></li>`);
     document.querySelector("#seasonYearsUl").insertAdjacentHTML("beforeend", yearsLi.join(""));
 
 
