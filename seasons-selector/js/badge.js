@@ -80,8 +80,11 @@ export const createOrRemoveLayerBadge = (layer) => {
     if(layerBadge) layerBadge.remove();
     if(layer.getVisible() && value) {
         createBadgeByLayer(getBadgeValue(), layerId);
-        let groupClassList = document.querySelector(`#${layerId}-layer-timefilter`).closest(".form-group-timer").classList;
-        groupClassList.add("form-group-seasons-timer");
+        let target = document.querySelector(`#${layerId}-layer-timefilter`);
+        if(target) {
+            let groupClassList = document.querySelector(`#${layerId}-layer-timefilter`).closest(".form-group-timer").classList;
+            groupClassList.add("form-group-seasons-timer");
+        }
     }
 }
 
