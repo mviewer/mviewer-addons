@@ -16,30 +16,25 @@
     padding-top: 0px !important;
 	z-index: 900;
 	max-width: 43rem;
-    width: 43rem;
 	background-color: #FFFFFF;
 	display: block;
 	border: none !important;
 	padding: 1.5rem;
 	box-shadow: 0 2px 20px 0 rgb(0 0 0 / 10%), 0 2px 20px 0 rgb(0 0 0 / 10%);
-	border-radius: 10px;
-	font-family: var(--myfont);
+	border-radius: var(--bs-border-radius);
 }
 
 /* Icône pour fermer le panel */
 
 a.closeSeasonPanel {
 	font-size: 40px;
-	font-weight: 400;
-	color: rgba(27, 37, 80, 0.2);
-	position: absolute;
-	top: 0px;
-	right: 25px;
-	cursor: default;
-}
-
-a.closeSeasonPanel:hover {
-	color: rgba(27, 37, 80, 0.6);
+    font-weight: 400;
+    position: absolute;
+    top: 0px;
+    right: 25px;
+    cursor: pointer;
+    color: currentColor;
+    opacity: .4;
 }
 
 /* Titre */
@@ -54,14 +49,12 @@ a.closeSeasonPanel:hover {
 }
 
 .seasonPanelHeader svg {
-	color: rgba(27, 37, 80);
     margin-right: 5px;
 }
 
 .seasonPanelTitleHeader {
 	font-size: 18px;
     font-weight: 700;
-    color: var(--mycolor);
     margin: 0;
 }
 
@@ -71,6 +64,7 @@ a.closeSeasonPanel:hover {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+    gap: 5px;
 }
 
 .seasonPanelText {
@@ -91,15 +85,13 @@ a.closeSeasonPanel:hover {
     font-size: 15px;
 }
 .seasonButton, .seasonButtonList {
-    margin-right: 5px;
     background-color: white;
     border-color: rgba(204, 204, 204, 0.5);
     color: rgb(116 116 116 / 70%);
-    font-family: system-ui;
     font-size: 12px;
     height: 60px;
     width: 70px;
-    border-radius: 0.7em;
+    border-radius: var(--bs-border-radius);
 }
 
 .seasonList .dropdown-menu {
@@ -119,9 +111,16 @@ a.closeSeasonPanel:hover {
     align-items: center;
 }
 
+.seasonSelector:hover {
+	background-color: color-mix(in srgb, var(--mv-color-primary) 10%, white)!important;
+	color: var(--mv-color-primary);
+    border-color: var(--mv-color-primary);
+}
+
 .seasonSelector[selected="true"] {
-	background-color: rgba(32,42,84, 0.1);
-	color: black;
+	background-color: color-mix(in srgb, var(--mv-color-primary) 10%, white)!important;
+	color: var(--mv-color-primary);
+    border-color: var(--mv-color-primary);
     pointer-events: none;
 }
 
@@ -139,10 +138,10 @@ span.badge.seasonBadge {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    background-color: #202a543d;
+    background-color: #80808021;
     font-size: 10px;
     border-radius: 5px;
-    color: #202a54;
+    color: #8f8f8fe6;
     border: none;
     font-family: var(--myfont);
 }
