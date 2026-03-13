@@ -1,0 +1,44 @@
+name: Release from parent
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version tag to create
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Check tag does not exist
+        run: |
+          git fetch --tags
+          if git rev-parse "${{ inputs.version }}" >/dev/null 2>&1; then
+            echo "Le tag existe déjà"
+            exit 1
+          fi
+
+      - name: Create tag
+        run: |
+          git tag "${{ inputs.version }}"
+          git push origin "${{ inputs.version }}"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.version }}" \
+            --repo "${{ github.repository }}" \
+            --target main \
+            --generate-notes
