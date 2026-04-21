@@ -42,7 +42,9 @@ const readFromRegEx = (value) => {
 export const getInfosFromCapaLayers = (process) => {
     const layers = getOptions().layersId;
     const capaUrls = layers.map(idLayer => {
-        const url = mviewer.getLayer(idLayer).layer.getSource().getUrls()[0];
+        const source = mviewer.getLayer(idLayer).layer.getSource();
+        const urls = typeof source.getUrls === "function" ? source.getUrls() : null;
+        const url = urls?.[0] || source.getUrl?.();
         return getCapUrl(url);
     });
     Promise.all(_.uniq(capaUrls).map(capaUrl => fetch(capaUrl).then(x => x.text()))).then(xml => {

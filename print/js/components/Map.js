@@ -53,7 +53,7 @@ const createMap = (layers, controls) => {
   const view = mviewer.getMap().getView();
   return new ol.Map({
     layers: layers,
-    controls: ol.control.defaults.defaults(controls),
+    controls: ol.control.defaults(controls),
     target: "mapPrint",
     view: view,
   });
