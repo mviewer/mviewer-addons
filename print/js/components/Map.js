@@ -64,24 +64,16 @@ const createMap = (layers, controls) => {
  * @returns array
  */
 const getMviewerMapLayers = () => {
-  const layers = [];
   var baseLayer = mviewer.getActiveBaseLayer();
   var allLayers = mviewer.getMap().getLayers().getArray();
-  allLayers.forEach(function (layer) {
-    // Filter only the visible basemap
-    if (layer.get("blid") === baseLayer) {
-      // map.addLayer(layer);
-      layers.push(layer);
-    }
-  });
-  /* Add layers */
   var layersIds = Object.keys(mviewer.getLayers());
-  layersIds.forEach((id) => {
-    var layer = mviewer.getLayer(id).layer;
-    // map.addLayer(layer);
-    layers.push(layer);
+
+  return allLayers.filter(function (layer) {
+    var mviewerId = layer.get("mviewerid");
+
+    // Keep the current map order, with only the active basemap and mviewer layers.
+    return layer.get("blid") === baseLayer || layersIds.includes(mviewerId);
   });
-  return layers;
 };
 
 export default function (northImgUrl) {
