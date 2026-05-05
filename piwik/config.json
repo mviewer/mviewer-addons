@@ -1,0 +1,20 @@
+{
+    "type":"module",
+    "js": ["piwik.js"],
+    "css": "empty.css",
+    "r":255,
+    "g":255,
+    "b":255,
+    "opacity":0.7,
+    "target": "map",
+    "html": "html/empty.html",
+    "options": {
+        "containerHost": "fake.containers.piwik.pro",
+        "containerIds": {
+            "fake.fr": "xxxxx-xxxx-xxxx-xxxxx-xxxxxxxxx"
+        },
+        "defaultContainerId": "zzzzzzzz-zzzz-zzzz-zzzzzz-zzzzzz",
+        "dataLayerName": "dataLayer",
+        "allowDebug": false
+    }
+}
