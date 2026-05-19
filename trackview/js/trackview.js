@@ -2,7 +2,12 @@ import { initDropdown } from "./custom-dropdown.js";
 
 var trackview = (function () {
   // Get all configurations
-  const tracksList = mviewer.customComponents.trackview.config.options.mviewer.parcours;
+  const applicationId = configuration.getConfiguration().application.id;
+  if (!applicationId) {
+    return console.error("No application id found in configuration file");
+  }
+  
+  const tracksList = mviewer.customComponents.trackview.config.options.mviewer[applicationId];
   let currentTracks = tracksList[0];
   let currentSelectedSegmentId = 0;
 
@@ -448,6 +453,12 @@ var trackview = (function () {
       li.textContent = tracksList[i].label;
 
       dropdown.appendChild(li);
+    }
+
+    // only display dropdown if more than 1 parcours
+    if (tracksList.length === 1) {
+      let circuitSelectorBtn = document.getElementById("trackview-dropdown-custom");
+      circuitSelectorBtn.classList.add("hidden");
     }
 
     // Here we check if the dropdown is clicked ( used )
