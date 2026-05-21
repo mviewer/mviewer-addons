@@ -12,7 +12,7 @@ Here, you can find a simple PDF rendered with this mviewer Print extension :
 
 ## Installation
 
-By default, Print extension is already available in the `/demo/addons` directory.
+By default, Print extension is already available in the `/addons` directory.
 
 So, use this extension as simple mviewer extension.
 
@@ -20,7 +20,7 @@ So, use this extension as simple mviewer extension.
 
 ```
 <extensions>
-  <extension type="component" id="print" path="demo/addons"/>
+  <extension type="component" id="print" path="addons"/>
 </extensions>
 ```
 
