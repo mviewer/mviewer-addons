@@ -2,6 +2,8 @@
 
 This extension provides a map layout interface to create and print a personalised PDF file.
 
+Legend titles can be edited directly in the print modal. Custom values are kept when the modal is closed and reopened during the same session.
+
 ![image](https://github.com/jdev-org/mviewer/assets/16317988/e84fd308-e08d-4314-812c-1f1403beba92)
 
 Only A4 (portrail/landscape) are available for this version.
@@ -134,6 +136,8 @@ You can find here the corresponding key for each item :
 | legend       | legend       |
 | title        | title        |
 | qrcode       | qrcode       |
+
+For the `legend` item, each layer title is editable directly in the print modal. The edited value is preserved when the modal content is rebuilt or reopened, as long as the page is not reloaded.
 
 ## Grid system
 
