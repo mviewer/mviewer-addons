@@ -5,6 +5,9 @@
 export const Legend = () => {
   const layerDetails = [...document.querySelectorAll(".mv-layer-details")];
   const TitleAndLegend = layerDetails.map((detail, i) => {
+    const layerId = detail.getAttribute("data-layerid");
+    const legendTitle =
+      detail.getAttribute("data-print-title") || detail.getAttribute("data-title") || "";
     let legend = detail.querySelector(".mv-legend");
     if (legend) {
       // legend from WMS
@@ -21,10 +24,26 @@ export const Legend = () => {
     }
     return `
         <div class="print-legend-img">
-            <p>${detail.getAttribute("data-title")}</p>
+            <p class="print-legend-title" contenteditable="true" data-layerid="${layerId}">${legendTitle}</p>
             ${legend?.outerHTML || legend}
         </div>
         `;
   });
   return TitleAndLegend.join("");
+};
+
+/**
+ * Sync edited legend titles with source layer details so values survive modal rebuilds.
+ * @returns {void}
+ */
+export const initLegendTitleEdition = () => {
+  document.querySelectorAll(".print-legend-title").forEach((title) => {
+    title.addEventListener("input", (event) => {
+      const layerId = event.target.getAttribute("data-layerid");
+      const detail = document.querySelector(`.mv-layer-details[data-layerid="${layerId}"]`);
+      if (detail) {
+        detail.setAttribute("data-print-title", event.target.textContent);
+      }
+    });
+  });
 };

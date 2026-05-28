@@ -1,4 +1,5 @@
 import { createBlock, deleteUselessBlocks, deleteBlocksById } from "./Block.js";
+import { initLegendTitleEdition } from "./Legend.js";
 import Map from "./Map.js";
 
 const parentModalId = "blockViewImpress";
@@ -46,6 +47,7 @@ export default (layoutJson) => {
   // create blocks
 
   createAndAddBlocs(layoutJson.items);
+  initLegendTitleEdition();
   setSize(layoutJson.format, layoutJson.landscape);
   if (mviewer.customComponents.print.printmap) {
     mviewer.customComponents.print.printmap.updateSize();
