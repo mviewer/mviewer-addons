@@ -16,7 +16,7 @@ const createAndAddBlocs = (items) => {
   // update size or create block for each layout item
   Object.keys(items).forEach((item) => {
     deleteBlocksById(item);
-    // create
+
     const block = createBlock({ ...items[item], id: item });
     modalGridContainer.insertAdjacentHTML("afterend", block);
   });

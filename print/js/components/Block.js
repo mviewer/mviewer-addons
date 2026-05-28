@@ -18,6 +18,7 @@ const defaultTemplate = ({
   style,
   classNames,
   zindex,
+  content
 }) => {
   const rowGrid = row ? `grid-row:${row}` : "";
   const colGrid = row ? `grid-column:${col}` : "";
@@ -27,7 +28,7 @@ const defaultTemplate = ({
   const ownerInfos = `
     <div>
     <p class="small">${pluginsOption?.ownerInfos || ""}</p>
-    <img src="${pluginsOption?.ownerLogo || ""}"/>
+    <img class="print-logo" src="${pluginsOption?.ownerLogo || ""}"/>
     <div/>
   `;
 
@@ -44,6 +45,9 @@ const defaultTemplate = ({
       break;
     case "informations":
       divByType = ownerInfos;
+      break;
+    case "custom":
+      divByType = content || "";
       break;
     default:
       `<div>${placeHolder}</div>`;
