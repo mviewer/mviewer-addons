@@ -27,6 +27,7 @@ const createAndAddBlocs = (items) => {
  * To force correct format size
  * @param {string} format
  * @param {boolean} landscape
+ * @returns {void}
  */
 const setSize = (format = "A4", landscape) => {
   const viewDiv = document.getElementById(parentModalId);
@@ -41,6 +42,12 @@ const setSize = (format = "A4", landscape) => {
   }
 };
 
+/**
+ * Rebuild the modal preview content from the selected layout.
+ *
+ * @param {object} layoutJson Selected layout configuration.
+ * @returns {void}
+ */
 export default (layoutJson) => {
   printGridContainer.style.display = "grid";
   if (!document.getElementById(parentModalId)) return;

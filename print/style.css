@@ -42,6 +42,74 @@
 
 #blockOptionsImpress {
     margin-right: 2em;
+    min-width: 280px;
+    max-width: 360px;
+}
+
+.print-actions {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 10px;
+	align-items: stretch;
+}
+
+.print-actions > .btn,
+.print-actions > .btn-group {
+	flex: 1 1 140px;
+}
+
+.print-actions .btn-group {
+	display: flex;
+}
+
+.print-actions .btn-group > .btn {
+	flex: 1 1 auto;
+}
+
+.print-actions .btn,
+.print-actions .dropdown-menu {
+	font-size: 0.875rem;
+}
+
+.print-actions .btn {
+	padding: 0.375rem 0.65rem;
+}
+
+.print-style-field-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.print-style-field-row .form-select,
+.print-style-field-row .form-control:not(.form-control-color) {
+	flex: 0 1 11rem;
+	min-width: 0;
+}
+
+.print-style-color-row .form-control-color {
+	flex: 0 0 auto;
+	width: 3rem;
+	min-width: 3rem;
+	padding: 0.2rem;
+}
+
+.print-style-field-row .form-label {
+	margin-bottom: 0;
+}
+
+.print-style-size-row .form-control {
+	flex-basis: 5rem;
+	max-width: 5rem;
+}
+
+.default-style-bloc {
+	width: 100%;
+}
+
+.default-style-bloc .btn {
+	width: 100%;
 }
 
 .print .print-panel-close {
@@ -57,6 +125,12 @@
 	min-height: fit-content;
 	max-width: 100%;
     max-height: 100%;
+	cursor: pointer;
+}
+
+.blockImpress.print-style-selected {
+	outline: 3px solid #0d6efd;
+	outline-offset: 2px;
 }
 
 .blockImpress .badge {
@@ -216,4 +290,31 @@
 .print-logo {
 	max-height:60px;
 	max-width: 65%;
+}
+@media (max-width: 1200px) {
+	.bodyFlex {
+		flex-wrap: wrap;
+	}
+
+	#blockOptionsImpress {
+		margin-right: 0;
+		margin-bottom: 1.5rem;
+		max-width: 100%;
+		width: 100%;
+	}
+
+	#blockViewImpress {
+		width: 100%;
+	}
+}
+
+@media (max-width: 576px) {
+	#printModal .modal-dialog {
+		max-width: 96% !important;
+	}
+
+	.print-actions > .btn,
+	.print-actions > .btn-group {
+		flex-basis: 100%;
+	}
 }

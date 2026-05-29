@@ -31,6 +31,12 @@ const defaultControls = {
 };
 
 // HTML string to render
+/**
+ * Build the HTML markup required to host the print map and optional north arrow.
+ *
+ * @param {string} northImgUrl URL of the north arrow image.
+ * @returns {string}
+ */
 const template = (northImgUrl) => {
   const northImg =
     northImgUrl &&
@@ -76,6 +82,12 @@ const getMviewerMapLayers = () => {
   });
 };
 
+/**
+ * Render and initialize the print map component.
+ *
+ * @param {string} [northImgUrl] Optional north arrow image URL.
+ * @returns {void}
+ */
 export default function (northImgUrl) {
   $("#print-mapPrint").append(template(northImgUrl || defaultNorthImgUrl));
 

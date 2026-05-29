@@ -1,4 +1,10 @@
 const dateString = new Date().toLocaleDateString();
+
+/**
+ * Default metadata used to create print blocks when a layout does not override them.
+ *
+ * @type {Object<string, object>}
+ */
 export const defaultBlocksInfos = {
   title: {
     title: "Titre",
@@ -40,4 +46,44 @@ export const defaultBlocksInfos = {
     zindex: 2,
   },
   mapPrint: { row: "2 / 6", col: "1 / 2", placeHolder: "", title: "Carte", zindex: 1 },
+};
+
+/**
+ * Default custom style values applied in the print style panel.
+ *
+ * @type {Object<string, string>}
+ */
+export const defaultCustomStyleOptions = {
+  backgroundColor: "#ffffff",
+  borderColor: "#808080",
+  fontFamily: "inherit",
+  fontSize: "16",
+  fontColor: "#1f2937",
+};
+
+/**
+ * DOM ids of form inputs used to edit print custom styles.
+ *
+ * @type {Object<string, string>}
+ */
+export const customStyleInputs = {
+  backgroundColor: "print-background-color",
+  borderColor: "print-border-color",
+  fontFamily: "print-font-family",
+  fontSize: "print-font-size",
+  fontColor: "print-font-color",
+};
+
+/**
+ * Labels displayed for selectable print blocks in the custom style panel.
+ *
+ * @type {Object<string, string>}
+ */
+export const customStyleBlockLabels = {
+  mapPrint: "Carte",
+  title: "Titre",
+  legend: "Légende",
+  informations: "Informations",
+  comments: "Commentaires",
+  qrcode: "QR Code",
 };

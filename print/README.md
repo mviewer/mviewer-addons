@@ -51,11 +51,12 @@ In options (create this key if not available), insert `options.mviewer.applicati
 
 You just have to know that the layout template administration is not required and offer default layout (see next chapter).
 
-Only 3 application properties are possible in the config.json file :
+Application properties available in the config.json file :
 
 - `printLayouts` : **required** _string_ - layout template (JSON) URL to use
 - `ownerLogo` : _string_ - default logo to use in informations area
 - `ownerInfos` : _string_ - default text to use in informations area
+- `customStyleDefaults` : _object_ - default values used to initialize style inputs in the print modal
 
   Here a simple example :
 
@@ -65,11 +66,39 @@ Only 3 application properties are possible in the config.json file :
       "print": {
         "printLayouts": "addons/print/layouts/standard.json",
         "ownerLogo": "https://avatars.githubusercontent.com/u/114171481?s=400&u=7fcf63ac01887ece3f5f2d5527e92c10527c7a91&v=4",
-        "ownerInfos": "This is default text to present mviewer map."
+        "ownerInfos": "This is default text to present mviewer map.",
+        "customStyleDefaults": {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#1e90ff",
+          "fontFamily": "Georgia, serif",
+          "fontSize": "14",
+          "fontColor": "#1f2937"
+        }
       }
     }
   }
 ```
+
+Available keys for `customStyleDefaults` :
+
+- `backgroundColor` : _string_ - default background color for blocks
+- `borderColor` : _string_ - default border color for blocks
+- `fontFamily` : _string_ - default font-family value
+- `fontSize` : _string_ - default font size in pixels
+- `fontColor` : _string_ - default text color
+
+## Style panel
+
+The print modal contains a `Style` accordion to edit block styles during the current session.
+
+You can:
+
+- apply a default style to all blocks with `Tous les blocs (défaut)`
+- select a single block from the target list or by clicking a block in the preview
+- apply a specific style only to the selected block
+- revert the selected block to the default style with `Revenir au style par défaut`
+
+Default values displayed in this accordion come from `customStyleDefaults` when present in `config.json`.
 
 **That's all ! Now, learn how to manage and use a custom layout with a simple JSON file.**
 
