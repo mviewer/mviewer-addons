@@ -5,8 +5,8 @@ import { Legend } from "./Legend.js";
 
 /**
  * Will create default template HTML string
- * @param {*} settings from items for a given key (e.g legend, mapPrint....)
- * @returns
+ * @param {object} settings Block settings for a given key (e.g. legend, mapPrint).
+ * @returns {string}
  */
 const defaultTemplate = ({
   id,
@@ -112,12 +112,18 @@ export const deleteUselessBlocks = (itemsToDisplay) => {
  */
 export const createBlock = (customInfos) => {
   let infos = defaultBlocksInfos[customInfos.id] || {};
-  return defaultTemplate({ ...infos, ...customInfos, classNames: customInfos.class });
+  const mergedInfos = { ...infos, ...customInfos, classNames: customInfos.class };
+
+  return defaultTemplate({
+    ...mergedInfos,
+  });
 };
 
 /**
  *
- * @returns options according to mviewer id
+ * Return the print addon options associated with the current mviewer application id.
+ *
+ * @returns {object}
  */
 export const getOptions = () => {
   const mviewerId = configuration.getConfiguration().application.id;

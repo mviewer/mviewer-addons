@@ -1,7 +1,7 @@
 /**
  * Will request layout JSON file from URL
  * @param {string} url
- * @returns
+ * @returns {Promise<object>}
  */
 export const downloadLayouts = (url) => {
   return fetch(url)
@@ -22,7 +22,7 @@ export const downloadLayouts = (url) => {
  *
  * @param {object} jsonLayout
  * @param {string} format always A4 for this first version
- * @returns
+ * @returns {object | undefined}
  */
 export const getSelectedLayout = (jsonLayout, format = "A4") => {
   let formats = _.keys(jsonLayout).map((k) => jsonLayout[k]);

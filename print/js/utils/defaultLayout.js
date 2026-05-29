@@ -1,3 +1,8 @@
+/**
+ * Built-in fallback print layout used when the external layout file cannot be loaded.
+ *
+ * @type {Object<string, object>}
+ */
 export const defaultLayout = {
   A4_LANDSCAPE: {
     format: "A4 (default)",

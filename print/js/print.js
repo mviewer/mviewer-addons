@@ -1,6 +1,17 @@
 import ToolbarButton from "./components/ToolbarButton.js";
 
-import { initOptions } from "./utils/printOptions.js";
+import {
+  applyCurrentBlockStyles,
+  initOptions,
+} from "./utils/printOptions.js";
+import {
+  getDefaultCustomStyleOptions,
+  setCustomStyleInputs,
+} from "./components/customStyle/customStyleOptions.js";
+import {
+  refreshCustomStyleContext,
+} from "./components/customStyle/customStyleApplier.js";
+import { resetCustomStyleState } from "./components/customStyle/customStyleState.js";
 
 import { filterCheckBox, iniCheckBox } from "./utils/controls.js";
 
@@ -11,6 +22,11 @@ import ModalContent from "./components/ModalContent.js";
 
 import { getOptions } from "./components/Block.js";
 
+/**
+ * Bind modal close cleanup to remove recreated print blocks and map container.
+ *
+ * @returns {void}
+ */
 const onCloseModal = () => {
   const btnClose = document.getElementById("closePrintModal");
   btnClose.onclick = () => {
@@ -20,6 +36,12 @@ const onCloseModal = () => {
   };
 };
 
+/**
+ * Initialize modal listeners and print actions for a resolved layout configuration.
+ *
+ * @param {Object<string, object>} layout Layout definitions loaded from config.
+ * @returns {void}
+ */
 const initWithLayout = (layout) => {
   $("#printModal").on("shown.bs.modal", function () {
     // supprime et recréer la carte seulement et non toute la modal
@@ -29,6 +51,8 @@ const initWithLayout = (layout) => {
     // init modal
     const layoutToUse = getSelectedLayout(layout);
     ModalContent(layoutToUse);
+    refreshCustomStyleContext();
+    applyCurrentBlockStyles();
     // manage checkbox display
     filterCheckBox(layoutToUse);
     // init checbox check event
@@ -36,7 +60,11 @@ const initWithLayout = (layout) => {
     document.querySelector(".print-reset-btn").addEventListener("click", () => {
       // init modal
       const layoutSelected = getSelectedLayout(layout);
+      resetCustomStyleState();
+      setCustomStyleInputs(getDefaultCustomStyleOptions());
       ModalContent(layoutSelected);
+      refreshCustomStyleContext();
+      applyCurrentBlockStyles();
     });
   });
   // preview PDF button listener
@@ -84,6 +112,11 @@ const initWithLayout = (layout) => {
   onCloseModal();
 };
 
+/**
+ * Bootstrap the print addon and load configured layouts.
+ *
+ * @returns {void}
+ */
 const init = () => {
   // call json template file to render layout
   downloadLayouts(getOptions().printLayouts)

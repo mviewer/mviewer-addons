@@ -23,7 +23,7 @@ const defaultOptions = {
  * Prepare divs and block to create a clean print document.
  * Required steps to hide badge, force size, update map etc...
  * @param {object} options
- * @returns
+ * @returns {HTMLElement}
  */
 const preparePrintElement = (options) => {
   var element = document.getElementById("printGridContainer");
@@ -42,6 +42,7 @@ const preparePrintElement = (options) => {
 /**
  * Download print as PDF
  * @param {object} options to override default options
+ * @returns {void}
  */
 export const downloadPDF = (options) => {
   const finalOptions = { ...defaultOptions, ...options };
@@ -59,6 +60,7 @@ export const downloadPDF = (options) => {
 /**
  * Display print as PDF in new tab
  * @param {object} options to override default options
+ * @returns {void}
  */
 export const displayPDF = (options) => {
   const finalOptions = { ...defaultOptions, ...options };
@@ -79,6 +81,7 @@ export const displayPDF = (options) => {
 /**
  * Download print as PNG
  * @param {object} options to override default options
+ * @returns {void}
  */
 export const displayAsPng = (options) => {
   const finalOptions = { ...defaultOptions, ...options };

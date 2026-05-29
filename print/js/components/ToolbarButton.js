@@ -12,6 +12,11 @@ const template = `
   <i class="ri-printer-line"></i>
 </button>`;
 
+/**
+ * Append the print button to the main tools toolbar.
+ *
+ * @returns {void}
+ */
 export default () => {
   $("#toolstoolbar").append(template);
 };
