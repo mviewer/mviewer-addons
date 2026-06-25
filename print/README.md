@@ -314,6 +314,8 @@ Example from `layouts/littosat.json` :
 }
 ```
 
+> Note : `content` parameter is only available with custom block element.
+
 Implementation details :
 
 - `js/components/ModalContent.js` loops through `layoutJson.items` and creates one block for each declared item.

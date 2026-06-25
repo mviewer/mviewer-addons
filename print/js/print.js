@@ -52,7 +52,7 @@ const initWithLayout = (layout) => {
     const layoutToUse = getSelectedLayout(layout);
     ModalContent(layoutToUse);
     refreshCustomStyleContext();
-    applyCurrentBlockStyles();
+    applyCurrentBlockStyles(layoutToUse);
     // manage checkbox display
     filterCheckBox(layoutToUse);
     // init checbox check event
