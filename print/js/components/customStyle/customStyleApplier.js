@@ -68,16 +68,19 @@ const getBlockContentElement = (block) =>
  * @param {object} [styleOptions={}] Style values to apply.
  * @returns {void}
  */
-const applyStylesToBlock = (block, styleOptions = {}) => {
+const applyStylesToBlock = (block, styleOptions = {}, styleFromCfg) => {
   block.style.borderColor = styleOptions.borderColor;
 
   if (block.id !== "print-mapPrint") {
     const content = getBlockContentElement(block);
     if (content) {
-      content.style.backgroundColor = styleOptions.backgroundColor;
-      content.style.fontFamily = styleOptions.fontFamily;
-      content.style.fontSize = `${styleOptions.fontSize}px`;
-      content.style.color = styleOptions.fontColor;
+        content.style.backgroundColor = styleOptions.backgroundColor;
+        content.style.fontFamily = styleOptions.fontFamily;
+        content.style.fontSize = `${styleOptions.fontSize}px`;
+        content.style.color = styleOptions.fontColor;
+        if(styleFromCfg) {
+          content.style.cssText += ";" + (styleFromCfg || "");
+        }
     }
   }
 
@@ -145,9 +148,11 @@ const syncTargetSelectValue = () => {
  *
  * @returns {void}
  */
-export const applyCurrentCustomStyles = () => {
+export const applyCurrentCustomStyles = (layout) => {
   getPrintableBlocks().forEach((block) => {
-    applyStylesToBlock(block, getStyleForBlock(getBlockIdFromElement(block)));
+    const id = block.id.replace(/^print-/, "");
+    const stylePropFromConfig = (layout?.items?.[id] || {})?.style;
+    applyStylesToBlock(block, getStyleForBlock(getBlockIdFromElement(block)), stylePropFromConfig);
   });
 
   updateSelectedBlockHighlight();
@@ -159,7 +164,7 @@ export const applyCurrentCustomStyles = () => {
  * @returns {void}
  */
 const handleStyleInputChange = () => {
-  const selectedBlockId = getSelectedBlockId();
+    const selectedBlockId = getSelectedBlockId();
   const currentStyle = getCustomStyleOptions();
 
   if (selectedBlockId === "default") {
