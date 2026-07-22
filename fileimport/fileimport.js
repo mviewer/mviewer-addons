@@ -559,7 +559,7 @@ const fileimport = (function () {
    */
   var _unzip = function (file, oLayer) {
     zip.workerScripts = {
-      inflater: ["addons/fileimport/lib/z-worker.js", "addons/fileimport/lib/inflate.js"],
+      inflater: ["addons/lib/z-worker.js", "addons/lib/inflate.js"],
     };
     zip.createReader(
       new zip.BlobReader(file),
@@ -678,7 +678,12 @@ const fileimport = (function () {
   }
 
   var _onerror = function (message) {
-    console.log(message);
+    var errorMessage =
+      message && message.message
+        ? message.message
+        : "Impossible de lire le fichier compressé.";
+    console.error(message);
+    mviewer.alert(errorMessage, "alert-warning");
   };
 
   /**
