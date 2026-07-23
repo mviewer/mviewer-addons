@@ -5,15 +5,17 @@ import {
 } from "./customStyleOptions.js";
 import { customStyleBlockLabels } from "../../const.js";
 import {
+  clearBlockStyleState,
+  getBlockStyleState,
   getDefaultStyleState,
   getSelectedBlockId,
-  getStyleForBlock,
   resetCustomStyleState,
   setBlockStyleState,
   setSelectedBlockId,
   setDefaultStyleState,
 } from "./customStyleState.js";
-import { getDefaultCustomStyleOptions } from "./customStyleOptions.js";
+
+let currentLayout;
 
 /**
  * Return all printable blocks currently rendered in the print grid.
@@ -59,7 +61,70 @@ const getBlockLabel = (blockId) => customStyleBlockLabels[blockId] || blockId;
  * @returns {HTMLElement | null}
  */
 const getBlockContentElement = (block) =>
-  block.querySelector(".text, .informations, .legend, .qrcode");
+  block.querySelector(".text, .informations, .legend, .qrcode, .custom");
+
+/**
+ * Convert a CSS color into the hexadecimal format required by color inputs.
+ *
+ * @param {string} color CSS color value.
+ * @returns {string | null}
+ */
+const getColorInputValue = (color) => {
+  const colorElement = document.createElement("span");
+  colorElement.style.color = color;
+  document.body.append(colorElement);
+  const computedColor = getComputedStyle(colorElement).color;
+  colorElement.remove();
+
+  const rgbValues = computedColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  if (!rgbValues) return null;
+
+  return `#${rgbValues
+    .slice(1)
+    .map((value) => Number(value).toString(16).padStart(2, "0"))
+    .join("")}`;
+};
+
+/**
+ * Extract style-panel values declared by a block in the active layout.
+ *
+ * @param {string} blockId Logical block identifier.
+ * @returns {object}
+ */
+const getLayoutStyleOptions = (blockId) => {
+  const styleText = currentLayout?.items?.[blockId]?.style;
+  if (!styleText) return {};
+
+  const style = document.createElement("div").style;
+  style.cssText = styleText;
+
+  const layoutStyle = {};
+  const backgroundColor =
+    style.backgroundColor && getColorInputValue(style.backgroundColor);
+  const borderColor = style.borderColor && getColorInputValue(style.borderColor);
+  const fontColor = style.color && getColorInputValue(style.color);
+
+  if (backgroundColor) layoutStyle.backgroundColor = backgroundColor;
+  if (borderColor) layoutStyle.borderColor = borderColor;
+  if (style.fontFamily) layoutStyle.fontFamily = style.fontFamily;
+  if (style.fontSize) layoutStyle.fontSize = style.fontSize.replace(/px$/, "");
+  if (fontColor) layoutStyle.fontColor = fontColor;
+
+  return layoutStyle;
+};
+
+/**
+ * Return the style applied to a block, from the global style, its layout and
+ * its optional user override, in precedence order.
+ *
+ * @param {string} blockId Logical block identifier.
+ * @returns {object}
+ */
+const getEffectiveStyleForBlock = (blockId) => ({
+  ...getDefaultStyleState(),
+  ...getLayoutStyleOptions(blockId),
+  ...(getBlockStyleState(blockId) || {}),
+});
 
 /**
  * Apply a style payload to a single rendered block.
@@ -68,7 +133,7 @@ const getBlockContentElement = (block) =>
  * @param {object} [styleOptions={}] Style values to apply.
  * @returns {void}
  */
-const applyStylesToBlock = (block, styleOptions = {}, styleFromCfg) => {
+const applyStylesToBlock = (block, styleOptions = {}) => {
   block.style.borderColor = styleOptions.borderColor;
 
   if (block.id !== "print-mapPrint") {
@@ -78,9 +143,6 @@ const applyStylesToBlock = (block, styleOptions = {}, styleFromCfg) => {
         content.style.fontFamily = styleOptions.fontFamily;
         content.style.fontSize = `${styleOptions.fontSize}px`;
         content.style.color = styleOptions.fontColor;
-        if(styleFromCfg) {
-          content.style.cssText += ";" + (styleFromCfg || "");
-        }
     }
   }
 
@@ -121,7 +183,9 @@ const updateSelectedBlockHighlight = () => {
 const syncStyleInputsWithSelection = () => {
   const selectedBlockId = getSelectedBlockId();
   const selectedStyle =
-    selectedBlockId === "default" ? getDefaultStyleState() : getStyleForBlock(selectedBlockId);
+    selectedBlockId === "default"
+      ? getDefaultStyleState()
+      : getEffectiveStyleForBlock(selectedBlockId);
 
   setCustomStyleInputs(selectedStyle);
 
@@ -149,10 +213,12 @@ const syncTargetSelectValue = () => {
  * @returns {void}
  */
 export const applyCurrentCustomStyles = (layout) => {
+  if (layout) {
+    currentLayout = layout;
+  }
+
   getPrintableBlocks().forEach((block) => {
-    const id = block.id.replace(/^print-/, "");
-    const stylePropFromConfig = (layout?.items?.[id] || {})?.style;
-    applyStylesToBlock(block, getStyleForBlock(getBlockIdFromElement(block)), stylePropFromConfig);
+    applyStylesToBlock(block, getEffectiveStyleForBlock(getBlockIdFromElement(block)));
   });
 
   updateSelectedBlockHighlight();
@@ -219,11 +285,16 @@ const bindTargetEvents = () => {
   if (resetButton) {
     resetButton.onclick = (event) => {
       event.preventDefault();
-      resetCustomStyleState();
-      setCustomStyleInputs(getDefaultCustomStyleOptions());
-      syncTargetOptions();
+      const selectedBlockId = getSelectedBlockId();
+
+      if (selectedBlockId === "default") {
+        resetCustomStyleState();
+      } else {
+        clearBlockStyleState(selectedBlockId);
+      }
+
       syncStyleInputsWithSelection();
-      applyCurrentCustomStyles();
+      applyCurrentCustomStyles(currentLayout);
     };
   }
 };

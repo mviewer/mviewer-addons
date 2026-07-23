@@ -21,7 +21,7 @@ const activeOrientationChangeAction = (layoutJson) => {
     ModalContent(layoutToUse);
     filterCheckBox(layoutToUse);
     refreshCustomStyleContext();
-    applyCurrentCustomStyles();
+    applyCurrentCustomStyles(layoutToUse);
   };
 };
 

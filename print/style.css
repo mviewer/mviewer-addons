@@ -147,7 +147,8 @@
     z-index: 1;
 }
 
-.blockImpress .text {
+.blockImpress .text,
+.blockImpress .custom {
 	height: 100%;
 }
 

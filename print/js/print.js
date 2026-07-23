@@ -64,7 +64,7 @@ const initWithLayout = (layout) => {
       setCustomStyleInputs(getDefaultCustomStyleOptions());
       ModalContent(layoutSelected);
       refreshCustomStyleContext();
-      applyCurrentBlockStyles();
+      applyCurrentBlockStyles(layoutSelected);
     });
   });
   // preview PDF button listener
