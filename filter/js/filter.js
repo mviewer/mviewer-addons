@@ -80,14 +80,16 @@ const filter = (function () {
       });
 
       //Add filter button to toolstoolbar
-      var button = `
-      <button id="filterbtn" class="btn btn-light"
-        onclick="filter.toggle();"  title="Filtrer les données" i18n="tbar.right.filter"
-        tabindex="115" accesskey="f">
-        <i class="ri-filter-line"></i>
-        </span>
-      </button>`;
-      $("#toolstoolbar").prepend(button);
+      if (!document.getElementById("filterbtn")) {
+        var button = `
+        <button id="filterbtn" class="btn btn-light"
+          onclick="filter.toggle();"  title="Filtrer les données" i18n="tbar.right.filter"
+          tabindex="115" accesskey="f">
+          <i class="ri-filter-line"></i>
+          </span>
+        </button>`;
+        $("#toolstoolbar").prepend(button);
+      }
     }
 
     // custom from config
