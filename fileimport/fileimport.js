@@ -128,7 +128,7 @@ const fileimport = (function () {
                 <span i18n="fileimport.select.coordinates">Sélectionnez les champs x, y à utiliser comme coordonnées</span>
               </button>
             </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordion">
               <div class="accordion-body">
                 <table id="table-csv" class="table">
                   <thead>
@@ -175,7 +175,7 @@ const fileimport = (function () {
                   <b>OU |</b> sélectionnez les champs à utiliser pour le géocodage (adresse) </span>
               </button>
             </h2>
-            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordion">
               <div class="accordion-body">
                 <div class="geocoding csv-fields list-group"></div>
               </div>
@@ -188,7 +188,7 @@ const fileimport = (function () {
                   <b>OU |</b> Sélectionnez le champ à utiliser pour le géocodage (insee) </span>
               </button>
             </h2>
-            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordion">
               <div class="accordion-body">
                 <div class="insee csv-fields list-group"></div>
               </div>
@@ -196,12 +196,12 @@ const fileimport = (function () {
           </div>
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
                 <span i18n="fileimport.select.search">
                   <b>OPTIONNEL |</b> Sélectionnez les champ à utiliser pour la recherche </span>
               </button>
             </h2>
-            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
+            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordion">
               <div class="accordion-body">
                 <div class="search csv-fields list-group"></div>
               </div>
