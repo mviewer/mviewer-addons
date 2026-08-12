@@ -118,8 +118,10 @@ const initWithLayout = (layout) => {
  * @returns {void}
  */
 const init = () => {
+  const options = getOptions();
+
   // call json template file to render layout
-  downloadLayouts(getOptions().printLayouts)
+  downloadLayouts(options.printLayouts)
     .then((jsonLayout) => initWithLayout(jsonLayout))
     .catch((err) => {
       initWithLayout(defaultLayout);

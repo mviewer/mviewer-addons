@@ -127,6 +127,9 @@ export const createBlock = (customInfos) => {
  */
 export const getOptions = () => {
   const mviewerId = configuration.getConfiguration().application.id;
-  const options = mviewer.customComponents.print.config.options;
-  return options.mviewer[mviewerId];
+  const component = mviewer.customComponents.print;
+  const options = component.config.options || {};
+  const applicationOptions = options.mviewer?.[mviewerId] || {};
+
+  return { ...applicationOptions, ...component.properties };
 };
