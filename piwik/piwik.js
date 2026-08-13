@@ -9,17 +9,7 @@ const DATA_LAYER_PATTERN = /^[A-Za-z_$][0-9A-Za-z_$]*$/;
  * @returns {Object} Resolved addon options.
  */
 const getComponentOptions = () => {
-    const config = mviewer.customComponents.piwik.config;
-    const options = config.options || {};
-    const hasConfiguration = typeof configuration !== "undefined" && typeof configuration.getConfiguration === "function";
-    const appConfig = hasConfiguration ? configuration.getConfiguration() : {};
-    const mviewerId = appConfig.application && appConfig.application.id;
-
-    if (mviewerId && options.mviewers && options.mviewers[mviewerId]) {
-        return Object.assign({}, options, options.mviewers[mviewerId]);
-    }
-
-    return options;
+    return mviewer.customComponents.piwik.options || {};
 };
 
 /**

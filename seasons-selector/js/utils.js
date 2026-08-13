@@ -6,9 +6,7 @@ import { createOrRemoveLayerBadge } from "./badge.js";
  * @returns 
  */
 export const getOptions = () => {
-    const mviewerId = configuration.getConfiguration().application.id;
-    const options = mviewer.customComponents?.[ID]?.config.options;
-    return options[mviewerId];
+    return mviewer.customComponents?.[ID]?.options || {};
 };
 
 

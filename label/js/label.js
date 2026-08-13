@@ -6,8 +6,7 @@ const label = (function () {
    * Get config from config file
    */
   function _getConfig() {
-    mviewerId = configuration.getConfiguration().application.id;
-    options = mviewer.customComponents.label.config.options.mviewer[mviewerId];
+    options = mviewer.customComponents.label.options;
 
     layerId = options.layer[0].layerId;
     field = options.layer[0].field;

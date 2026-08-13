@@ -1,5 +1,5 @@
 const COMPONENT_ID = "MapFeatureSelector";
-const OPTIONS = mviewer.customComponents[COMPONENT_ID].config.options;
+const OPTIONS = mviewer.customComponents[COMPONENT_ID].options;
 
 $(document).ready(function () {
   let customLayer = null;

@@ -20,7 +20,7 @@ export const Legend = () => {
       let canvasToImg = canvas
         .toDataURL("image/png")
         .replace("image/png", "image/octet-stream");
-      legend = `<img class="mv-legend" id="legend-${newId}" src="${canvasToImg}" alt="Légende non disponible" onload="mviewer &amp;&amp;" onerror="this.onerror=null;this.src='img/nolegend.png';">`;
+      legend = `<img class="mv-legend" id="legend-${newId}" src="${canvasToImg}" alt="Légende non disponible" onerror="this.onerror=null;this.src='img/nolegend.png';">`;
     }
     return `
         <div class="print-legend-img">

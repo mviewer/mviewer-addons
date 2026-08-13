@@ -26,15 +26,9 @@ var stats = (function () {
    */
   var _initTool = function () {
     console.log("_initTool");
-    // get config for a specific mviewer
-    var mviewerId = configuration.getConfiguration().application.id;
-    var options = mviewer.customComponents.stats.config.options;
-    if (mviewerId && options.mviewer && options.mviewer[mviewerId]) {
-      mviewer.customComponents.stats.config.options = options.mviewer[mviewerId];
-      options = mviewer.customComponents.stats.config.options;
-    }
+    var options = mviewer.customComponents.stats.options;
     // get stats configuration
-    _layersStatsParams = mviewer.customComponents.stats.config.options.stats;
+    _layersStatsParams = options.stats;
 
     if (_layersStatsParams.length > 0) {
       // wait map ready and prepare layers to avoid empty panel
@@ -67,9 +61,9 @@ var stats = (function () {
    * Recour au setTimeout car aucun event ne se déclenche correctement à la fin du chargement des données
    */
   var _initPanel = function () {
-    var options = mviewer.customComponents.stats.config.options;
+    var options = mviewer.customComponents.stats.options;
     // show panel if wanted
-    if (mviewer.customComponents.stats.config.options.open && window.innerWidth > 360) {
+    if (options.open && window.innerWidth > 360) {
       $("#statsbtn").addClass("active");
       $("#statsPanel").show();
     }
@@ -178,8 +172,8 @@ var stats = (function () {
   };
 
   var _setStyle = function () {
-    if (!mviewer.customComponents.stats.config.options.style) return;
-    var style = mviewer.customComponents.stats.config.options.style;
+    var style = mviewer.customComponents.stats.options.style;
+    if (!style) return;
     $(".titleHeader").css("color", style.text || "black");
     $("#statsPanel").css("background-color", style.background || "white");
     $("#statsPanel").css("border", style.border || "0px transparent solid");

@@ -57,15 +57,9 @@ const filter = (function () {
    *
    */
   var _initFilterTool = function (isLayerChange) {
-    // get config for a specific mviewer
-    var mviewerId = configuration.getConfiguration().application.id;
-    var options = mviewer.customComponents.filter.config.options;
-    if (mviewerId && options.mviewer && options.mviewer[mviewerId]) {
-      mviewer.customComponents.filter.config.options = options.mviewer[mviewerId];
-      options = mviewer.customComponents.filter.config.options;
-    }
+    var options = mviewer.customComponents.filter.options;
     // get filters by layer
-    var layersParams = mviewer.customComponents.filter.config.options.layers;
+    var layersParams = options.layers;
 
     layersParams.forEach((layer) => {
       _layersFiltersParams.set(layer.layerId, layer.filter);
@@ -103,7 +97,7 @@ const filter = (function () {
    * Recour au setTimeout car aucun event ne se déclenche correctement à la fin du chargement des données
    */
   var _initFilterPanel = function () {
-    var options = mviewer.customComponents.filter.config.options;
+    var options = mviewer.customComponents.filter.options;
     // Parse all layers to get params
     for (var [layerId, params] of _layersFiltersParams) {
       const mvLayer = mviewer.getLayer(layerId);
@@ -121,7 +115,7 @@ const filter = (function () {
 
           // show panel if wanted
           if (
-            mviewer.customComponents.filter.config.options.open &&
+            mviewer.customComponents.filter.options.open &&
             !configuration.getConfiguration().mobile
           ) {
             $("#advancedFilter").show();
@@ -198,7 +192,7 @@ const filter = (function () {
     var nbLayers = _layersFiltersParams.size;
 
     var title =
-      mviewer.customComponents.filter.config.options.legendTitle || "Choix de la couche";
+      mviewer.customComponents.filter.options.legendTitle || "Choix de la couche";
     var contentSelectLayer = [
       `<div class="mb-2">
       <label id="layerSelectText" class="textlabel form-label">${title}</label>
@@ -237,7 +231,7 @@ const filter = (function () {
           _manageDateFilter(destinationDivId, layerId, params[index]);
         }
       }
-      const layerConfig = mviewer.customComponents.filter.config.options.layers.find(
+      const layerConfig = mviewer.customComponents.filter.options.layers.find(
         (x) => x.layerId == layerId
       );
       if (layerConfig.downloadFormats && layerConfig.downloadFormats.length) {
@@ -938,7 +932,7 @@ const filter = (function () {
     var extent;
 
     // if zoomOnFeatures enable create an empty extent
-    if (mviewer.customComponents.filter.config.options.zoomOnFeatures) {
+    if (mviewer.customComponents.filter.options.zoomOnFeatures) {
       extent = ol.extent.createEmpty();
     }
 
@@ -987,7 +981,7 @@ const filter = (function () {
         feature.setStyle(null);
         newVisibleFeatures.push(ol.util.getUid(feature));
         // Extend creation if zoomOnFeatures enable
-        if (mviewer.customComponents.filter.config.options.zoomOnFeatures) {
+        if (mviewer.customComponents.filter.options.zoomOnFeatures) {
           ol.extent.extend(extent, feature.getGeometry().getExtent());
         }
       }
@@ -995,7 +989,7 @@ const filter = (function () {
     _visibleFeatures.set(layerId, newVisibleFeatures);
     // zoom on features
     if (
-      mviewer.customComponents.filter.config.options.zoomOnFeatures &&
+      mviewer.customComponents.filter.options.zoomOnFeatures &&
       !ol.extent.isEmpty(extent)
     ) {
       // add buffer arround extent
@@ -1110,8 +1104,8 @@ const filter = (function () {
   };
 
   var _setStyle = function (reinitPosition = false) {
-    if (!mviewer.customComponents.filter.config.options.style) return;
-    var style = mviewer.customComponents.filter.config.options.style;
+    var style = mviewer.customComponents.filter.options.style;
+    if (!style) return;
     $(".textlabel").css("color", style.text);
     $("#advancedFilter").css("background-color", style.background);
     $("#advancedFilter").css("border", style.border);

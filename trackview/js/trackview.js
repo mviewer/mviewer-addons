@@ -1,13 +1,16 @@
 import { initDropdown } from "./custom-dropdown.js";
 
 var trackview = (function () {
-  // Get all configurations
+  // Get the configuration for the current mviewer application from config.json.
+  const component = mviewer.customComponents.trackview;
   const applicationId = configuration.getConfiguration().application.id;
-  if (!applicationId) {
-    return console.error("No application id found in configuration file");
+  const tracksList =
+    component.config.options?.mviewer?.[applicationId] || component.options;
+
+  if (!Array.isArray(tracksList)) {
+    return console.error(`No trackview configuration found for "${applicationId}"`);
   }
-  
-  const tracksList = mviewer.customComponents.trackview.config.options.mviewer[applicationId];
+
   let currentTracks = tracksList[0];
   let currentSelectedSegmentId = 0;
 

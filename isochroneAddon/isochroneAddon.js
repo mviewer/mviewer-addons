@@ -129,7 +129,7 @@ const isochroneAddon = (function () {
      */
 
     var mode = $(".selected.isochrone-mode").attr("data-mode");
-    var url = mviewer.customComponents["isochroneAddon"].config.options.isochroneUrl;
+    var url = mviewer.customComponents["isochroneAddon"].options.isochroneUrl;
 
     var dataParameters = {
       resource: "bdtopo-valhalla",
@@ -295,10 +295,10 @@ const isochroneAddon = (function () {
        *gets info from json file
        */
 
-      var isoTitle = mviewer.customComponents["isochroneAddon"].config.options.isoTitle;
+      var isoTitle = mviewer.customComponents["isochroneAddon"].options.isoTitle;
       document.getElementById("addon_title").innerText = isoTitle;
       var isoColor =
-        mviewer.customComponents["isochroneAddon"].config.options.isohroneColor;
+        mviewer.customComponents["isochroneAddon"].options.isohroneColor;
       document.getElementById("iso_color").value = isoColor;
 
       /**

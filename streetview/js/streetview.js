@@ -28,7 +28,7 @@ var streetview = (function () {
   var _initStreetView = () => {
     _streetViewBtn = document.getElementById("streetViewBtn");
 
-    _config = mviewer.customComponents.streetview.config.options.mviewer.streetview;
+    _config = mviewer.customComponents.streetview.options;
     _typeCoordinates = _config.coordinates.type;
     _url = _config.url;
 

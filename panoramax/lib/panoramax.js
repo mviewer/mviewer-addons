@@ -33,7 +33,7 @@ var panoramax = (function () {
    * Initialize the component
    */
   var _initpanoramax = () => {
-    _config = mviewer.customComponents.panoramax.config.options.panoramax;
+    _config = mviewer.customComponents.panoramax.options;
     _url = _config.url;
     _map = mviewer.getMap();
     _projection = _map.getView().getProjection();

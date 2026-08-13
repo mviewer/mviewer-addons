@@ -23,7 +23,7 @@ const layerfilter = (function () {
     // options by default or from addon config.json file
     _fuseMotor = new Fuse(list, {
       ...defaultFuseOptions,
-      ...mviewer.customComponents["layerfilter"].config.options.fuseOptions,
+      ...mviewer.customComponents["layerfilter"].options.fuseOptions,
     });
   };
 

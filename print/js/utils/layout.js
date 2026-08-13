@@ -4,7 +4,18 @@
  * @returns {Promise<object>}
  */
 export const downloadLayouts = (url) => {
-  return fetch(url)
+  const baseUrl = new URL(window.location.href);
+  baseUrl.search = "";
+  baseUrl.hash = "";
+  const layoutUrl = new URL(url, baseUrl);
+
+  return fetch(layoutUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Unable to load print layout: ${layoutUrl}`);
+      }
+      return response;
+    })
     .then((r) => r.json())
     .then((content) => {
       const customEvt = new CustomEvent("printLayoutAvailable", {

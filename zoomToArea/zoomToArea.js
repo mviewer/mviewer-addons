@@ -2,10 +2,8 @@ const zoomToArea = function () {
   /**
    * Plugin's config
    */
-  const getId = () => configuration.getConfiguration()?.application["id"];
   const getAppEPSG = () => mviewer.getMap().getView().getProjection().getCode();
-  let config = () => mviewer.customComponents.zoomToArea.config;
-  let options = () => config()?.options?.mviewer[getId()];
+  let options = () => mviewer.customComponents.zoomToArea.options;
 
   // Add loader during loading data
   $(".navbar-right").prepend(
