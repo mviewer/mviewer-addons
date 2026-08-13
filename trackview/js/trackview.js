@@ -143,6 +143,11 @@ var trackview = (function () {
       style: _createSelectedSegementStyle,
     });
     sourceSegment = vectorLayerSegment.getSource();
+    // mviewer.addLayer() calls refresh() whenever a layer is enabled.
+    // Linked issue : https://github.com/mviewer/mviewer/issues/1304
+    // The Trackview segments are generated in memory from the GPX, so refreshing
+    // their source must preserve the generated features.
+    sourceSegment.refresh = () => sourceSegment.changed();
     mviewer.processLayer(mviewerCurrentTrackLayer, vectorLayerSegment);
     mviewer.addLayer(mviewerCurrentTrackLayer);
 
@@ -167,7 +172,6 @@ var trackview = (function () {
     vectorLayerSegment.on("change:visible", function (event) {
       const isVisible = vectorLayerSegment.getVisible();
       vectorLayerPointKilometers.setVisible(isVisible);
-
       if (!isVisible) {
         // hide graph
         document.getElementById("trackview-panel").classList.add("hidden");
